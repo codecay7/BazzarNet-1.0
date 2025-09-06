@@ -134,8 +134,8 @@ const Login = () => {
   const inputClasses = "w-full p-3 my-2 text-[var(--text)] border border-white/30 rounded-lg bg-white/10 focus:outline-none focus:ring-2 focus:ring-[var(--accent)]";
 
   return (
-    <div className="min-h-screen flex flex-col items-center bg-[var(--bg-body)] p-4 overflow-y-auto">
-      <div className="bg-[var(--card-bg)] backdrop-blur-[5px] border border-white/30 rounded-2xl flex flex-col p-6 sm:p-8 shadow-[0_8px_40px_var(--shadow)] w-full max-w-[400px] mx-4 text-center text-[var(--auth-text)]">
+    <div className="min-h-screen flex flex-col justify-center items-center bg-[var(--bg-body)] p-4">
+      <div className="bg-[var(--card-bg)] backdrop-blur-[5px] border border-white/30 rounded-2xl flex flex-col p-8 shadow-[0_8px_40px_var(--shadow)] w-full max-w-[400px] mx-4 text-center text-[var(--auth-text)]">
         <h2 className="text-2xl font-bold mb-6 text-[var(--accent)]">Welcome to BazzarNet</h2>
         
         <div className="flex justify-center bg-black/10 rounded-lg p-1 mb-6" role="tablist">

@@ -31,6 +31,7 @@ const sampleCustomers = [
       city: 'Bengaluru',
       state: 'Karnataka',
       pinCode: '560001',
+      mobile: '9876543210', // NEW: Added mobile
     },
   },
   {
@@ -45,6 +46,7 @@ const sampleCustomers = [
       city: 'Mumbai',
       state: 'Maharashtra',
       pinCode: '400001',
+      mobile: '9123456789', // NEW: Added mobile
     },
   },
   {
@@ -59,6 +61,7 @@ const sampleCustomers = [
       city: 'Delhi',
       state: 'Delhi',
       pinCode: '110001',
+      mobile: '9988776655', // NEW: Added mobile
     },
   },
   {
@@ -73,6 +76,7 @@ const sampleCustomers = [
       city: 'Chennai',
       state: 'Tamil Nadu',
       pinCode: '600001',
+      mobile: '9001122334', // NEW: Added mobile
     },
   },
   {
@@ -87,6 +91,7 @@ const sampleCustomers = [
       city: 'Kolkata',
       state: 'West Bengal',
       pinCode: '700001',
+      mobile: '9554433221', // NEW: Added mobile
     },
   },
   {
@@ -101,6 +106,7 @@ const sampleCustomers = [
       city: 'Bengaluru',
       state: 'Karnataka',
       pinCode: '560001',
+      mobile: '9998887770', // NEW: Added mobile
     },
   },
 ];
@@ -123,6 +129,7 @@ const sampleVendors = [
       city: 'Bengaluru', // Changed state to match pincode region
       state: 'Jharkhand', // Changed state to match pincode region
       pinCode: '825301', // Updated pincode
+      mobile: '8001112223', // NEW: Added mobile
     },
     profileImage: 'https://images.unsplash.com/photo-1542838132-925602678290?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
   },
@@ -143,6 +150,7 @@ const sampleVendors = [
       city: 'Ramgarh', // Changed city to match pincode region
       state: 'Jharkhand', // Changed state to match pincode region
       pinCode: '825301', // Updated pincode
+      mobile: '8002223334', // NEW: Added mobile
     },
     profileImage: 'https://images.unsplash.com/photo-1587334175721-ad1e1071317e?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
   },
@@ -163,6 +171,7 @@ const sampleVendors = [
       city: 'Hazaribagh', // Changed city to match pincode region
       state: 'Jharkhand', // Changed state to match pincode region
       pinCode: '825301', // Updated pincode
+      mobile: '8003334445', // NEW: Added mobile
     },
     profileImage: 'https://images.unsplash.com/photo-1517336714730-49689c8a9680?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     },
@@ -183,6 +192,7 @@ const sampleVendors = [
       city: 'Bokaro', // Changed city to match pincode region
       state: 'Jharkhand', // Changed state to match pincode region
       pinCode: '825301', // Updated pincode
+      mobile: '8004445556', // NEW: Added mobile
     },
     profileImage: 'https://images.unsplash.com/photo-1523381294911-8d3cead1858b?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
   },
@@ -203,6 +213,7 @@ const sampleVendors = [
       city: 'Dhanbad', // Changed city to match pincode region
       state: 'Jharkhand', // Changed state to match pincode region
       pinCode: '825301', // Updated pincode
+      mobile: '8005556667', // NEW: Added mobile
     },
     profileImage: 'https://images.unsplash.com/photo-1563298723-dcfc10990f36?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
   },

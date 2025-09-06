@@ -32,6 +32,7 @@ const VendorRegistrationForm = () => {
       city: '',
       state: '',
       pinCode: '',
+      mobile: '', // NEW: Mobile field
     },
     description: '',
     category: 'Groceries',
@@ -109,6 +110,11 @@ const VendorRegistrationForm = () => {
       addressErrors.pinCode = 'Pin Code is required.';
     } else if (!/^\d{6}$/.test(formData.address.pinCode)) {
       addressErrors.pinCode = 'Pin Code must be 6 digits.';
+    }
+    if (!formData.address.mobile.trim()) { // NEW: Validate mobile
+      addressErrors.mobile = 'Mobile number is required.';
+    } else if (!/^\+?\d{10,15}$/.test(formData.address.mobile)) {
+      addressErrors.mobile = 'Mobile number is invalid.';
     }
     if (Object.keys(addressErrors).length > 0) {
       newErrors.address = addressErrors;
@@ -344,6 +350,21 @@ const VendorRegistrationForm = () => {
           disabled={isLoading}
         />
         {errors.address?.pinCode && <p id="vendorAddressPinCode-error" className="text-red-400 text-xs mt-1">{errors.address.pinCode}</p>}
+      </div>
+      <div>
+        <label htmlFor="vendorAddressMobile" className="text-sm font-medium">Mobile Number</label> {/* NEW: Mobile input */}
+        <input 
+          type="tel" 
+          id="vendorAddressMobile"
+          name="address.mobile" 
+          value={formData.address.mobile} 
+          onChange={handleChange} 
+          className={inputClasses} 
+          aria-invalid={!!errors.address?.mobile}
+          aria-describedby={errors.address?.mobile ? "vendorAddressMobile-error" : undefined}
+          disabled={isLoading}
+        />
+        {errors.address?.mobile && <p id="vendorAddressMobile-error" className="text-red-400 text-xs mt-1">{errors.address.mobile}</p>}
       </div>
       <div>
         <label htmlFor="vendorDescription" className="text-sm font-medium">Business Description</label>

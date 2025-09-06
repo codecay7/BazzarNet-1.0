@@ -32,7 +32,8 @@ const Checkout = () => {
       landmark: '',
       city: '',
       state: '',
-      pinCode: ''
+      pinCode: '',
+      mobile: '', // NEW: Added mobile to initial state
     };
   });
 
@@ -87,6 +88,11 @@ const Checkout = () => {
       newErrors.pinCode = 'Pin Code must be 6 digits.';
     } else if (shippingAddress.pinCode !== VALID_PINCODE) { // Pincode restriction
       newErrors.pinCode = `Currently, shops are only available for pincode ${VALID_PINCODE}.`;
+    }
+    if (!shippingAddress.mobile.trim()) { // NEW: Validate mobile
+      newErrors.mobile = 'Mobile number is required.';
+    } else if (!/^\+?\d{10,15}$/.test(shippingAddress.mobile)) {
+      newErrors.mobile = 'Mobile number is invalid.';
     }
     setAddressErrors(newErrors);
     return Object.keys(newErrors).length === 0;

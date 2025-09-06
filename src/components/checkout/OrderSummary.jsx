@@ -12,6 +12,7 @@ const OrderSummary = ({ cart, subtotal, total, shippingAddress, appliedCoupon, d
     parts.push(address.city);
     parts.push(address.state);
     parts.push(address.pinCode);
+    if (address.mobile) parts.push(`Mob: ${address.mobile}`); // NEW: Include mobile
     return parts.filter(Boolean).join(', ');
   };
 

@@ -22,6 +22,11 @@ const shippingAddressSchema = Joi.object({
     'string.empty': 'Pin Code is required.',
     'string.pattern.base': 'Pin Code must be 6 digits.',
   }),
+  mobile: Joi.string().pattern(/^\+?\d{10,15}$/).required().messages({ // NEW: Added mobile to address
+    'string.empty': 'Mobile number is required.',
+    'string.pattern.base': 'Mobile number is invalid.',
+    'any.required': 'Mobile number is required.',
+  }),
 });
 
 const placeOrderSchema = Joi.object({

@@ -40,6 +40,7 @@ const orderSchema = new mongoose.Schema({
     city: { type: String, required: true, trim: true },
     state: { type: String, required: true, trim: true },
     pinCode: { type: String, required: true, trim: true },
+    mobile: { type: String, required: true, trim: true }, // NEW: Added mobile field
   },
   paymentMethod: {
     type: String,

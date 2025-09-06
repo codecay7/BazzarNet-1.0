@@ -157,6 +157,13 @@ const CustomerOrderDetails = () => {
           <p><strong>Transaction ID:</strong> {currentOrder.transactionId || 'N/A'}</p>
         </div>
 
+        {/* Shipping Address Display */}
+        <div className="bg-black/10 p-6 rounded-xl mb-8">
+            <h3 className="text-xl font-semibold mb-4">Shipping Address</h3>
+            <p>{currentOrder.shippingAddress.houseNo}, {currentOrder.shippingAddress.landmark ? currentOrder.shippingAddress.landmark + ', ' : ''}{currentOrder.shippingAddress.city}, {currentOrder.shippingAddress.state} - {currentOrder.shippingAddress.pinCode}</p>
+            <p>Mobile: {currentOrder.shippingAddress.mobile}</p> {/* NEW: Display mobile */}
+        </div>
+
         {/* Items List */}
         <div className="bg-black/10 p-6 rounded-xl">
           <h3 className="text-xl font-semibold mb-4">Items in Your Order</h3>

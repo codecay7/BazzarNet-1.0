@@ -13,6 +13,7 @@ const UserSignupForm = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [mobile, setMobile] = useState(''); // NEW: Mobile state
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false); // New state
@@ -36,6 +37,11 @@ const UserSignupForm = () => {
     } else if (password.length < 6) {
       newErrors.password = 'Password must be at least 6 characters long.';
     }
+    if (!mobile.trim()) { // NEW: Validate mobile
+      newErrors.mobile = 'Mobile number is required.';
+    } else if (!/^\+?\d{10,15}$/.test(mobile)) {
+      newErrors.mobile = 'Mobile number is invalid.';
+    }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -49,13 +55,14 @@ const UserSignupForm = () => {
           name,
           email,
           password,
-          phone: '',
+          phone: '', // This is the user's contact phone, not shipping address mobile
           address: {
             houseNo: '',
             landmark: '',
             city: '',
             state: '',
             pinCode: '',
+            mobile: mobile, // NEW: Pass mobile to address
           },
         };
         if (await registerUser(userData)) {
@@ -112,6 +119,20 @@ const UserSignupForm = () => {
         disabled={isLoading}
       />
       {errors.email && <p id="email-error" className="text-red-400 text-xs mb-3">{errors.email}</p>}
+
+      <label htmlFor="mobile" className="mb-1 text-sm font-medium">Mobile Number</label> {/* NEW: Mobile input */}
+      <input 
+        type="tel" 
+        id="mobile"
+        value={mobile} 
+        onChange={(e) => setMobile(e.target.value)} 
+        placeholder="e.g., 9876543210" 
+        className="w-full p-3 mb-1 text-[var(--text)] border border-white/30 rounded-lg bg-white/10 focus:outline-none focus:ring-2 focus:ring-[var(--accent)]" 
+        aria-invalid={!!errors.mobile}
+        aria-describedby={errors.mobile ? "mobile-error" : undefined}
+        disabled={isLoading}
+      />
+      {errors.mobile && <p id="mobile-error" className="text-red-400 text-xs mb-3">{errors.mobile}</p>}
       
       <label htmlFor="password" className="mb-1 text-sm font-medium">Password</label>
       <div className="relative w-full">

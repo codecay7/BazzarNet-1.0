@@ -24,7 +24,8 @@ const Profile = () => {
       landmark: '',
       city: '',
       state: '',
-      pinCode: ''
+      pinCode: '',
+      mobile: '', // NEW: Added mobile to initial state
     },
     pan: user?.pan || '', // Only for vendors
     gst: user?.gst || '', // Only for vendors
@@ -73,6 +74,11 @@ const Profile = () => {
       } else if (!/^\d{6}$/.test(data.address.pinCode)) {
         newErrors.address = { ...newErrors.address, pinCode: 'Pin Code must be 6 digits.' };
       }
+      if (!data.address.mobile.trim()) { // NEW: Validate mobile
+        newErrors.address = { ...newErrors.address, mobile: 'Mobile number is required.' };
+      } else if (!/^\+?\d{10,15}$/.test(data.address.mobile)) {
+        newErrors.address = { ...newErrors.address, mobile: 'Mobile number is invalid.' };
+      }
     }
 
     if (isVendor) {
@@ -120,7 +126,7 @@ const Profile = () => {
           store: fetchedUser.store || '',
           email: fetchedUser.email || '',
           phone: fetchedUser.phone || '',
-          address: fetchedUser.address || { houseNo: '', landmark: '', city: '', state: '', pinCode: '' },
+          address: fetchedUser.address || { houseNo: '', landmark: '', city: '', state: '', pinCode: '', mobile: '' }, // NEW: Added mobile
           pan: fetchedUser.pan || '',
           gst: fetchedUser.gst || '',
           category: fetchedUser.category || '',

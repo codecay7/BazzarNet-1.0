@@ -193,9 +193,13 @@ const CustomerProfileForm = ({ profileData, setProfileData, isEditing, handleSav
                   <label htmlFor="addressPinCode" className="sr-only">Pin Code</label>
                   <input type="text" name="address.pinCode" id="addressPinCode" value={profileData.address.pinCode} onChange={handleInputChange} className={inputClasses} placeholder="Pin Code" maxLength="6" aria-label="Pin Code" aria-invalid={!!errors.address?.pinCode} aria-describedby={errors.address?.pinCode ? "addressPinCode-error" : undefined} disabled={isSaving} />
                   {errors.address?.pinCode && <p id="addressPinCode-error" className="text-red-400 text-xs mt-1">{errors.address.pinCode}</p>}
+
+                  <label htmlFor="addressMobile" className="sr-only">Mobile Number</label> {/* NEW: Mobile input */}
+                  <input type="tel" name="address.mobile" id="addressMobile" value={profileData.address.mobile} onChange={handleInputChange} className={inputClasses} placeholder="Mobile Number" aria-label="Mobile Number" aria-invalid={!!errors.address?.mobile} aria-describedby={errors.address?.mobile ? "addressMobile-error" : undefined} disabled={isSaving} />
+                  {errors.address?.mobile && <p id="addressMobile-error" className="text-red-400 text-xs mt-1">{errors.address.mobile}</p>}
                 </div>
               ) : (
-                <p className="font-medium">{profileData.address ? `${profileData.address.houseNo}, ${profileData.address.landmark ? profileData.address.landmark + ', ' : ''}${profileData.address.city}, ${profileData.address.state} - ${profileData.address.pinCode}` : 'N/A'}</p>
+                <p className="font-medium">{profileData.address ? `${profileData.address.houseNo}, ${profileData.address.landmark ? profileData.address.landmark + ', ' : ''}${profileData.address.city}, ${profileData.address.state} - ${profileData.address.pinCode} (Mob: ${profileData.address.mobile})` : 'N/A'}</p>
               )}
             </div>
           </div>

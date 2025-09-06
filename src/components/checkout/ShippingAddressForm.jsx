@@ -100,6 +100,22 @@ const ShippingAddressForm = ({ address, errors, handleChange, onNextStep }) => {
         />
         {errors?.pinCode && <p id="pinCode-error" className="text-red-400 text-xs -mt-3">{errors.pinCode}</p>}
       </div>
+
+      <div> {/* NEW: Mobile Number Field */}
+        <label htmlFor="mobile" className="block text-sm font-medium mb-1">Mobile Number</label>
+        <input
+          type="tel"
+          id="mobile"
+          name="mobile"
+          value={address.mobile}
+          onChange={handleChange}
+          placeholder="e.g., 9876543210"
+          className={inputClasses}
+          aria-invalid={!!errors?.mobile}
+          aria-describedby={errors?.mobile ? "mobile-error" : undefined}
+        />
+        {errors?.mobile && <p id="mobile-error" className="text-red-400 text-xs -mt-3">{errors.mobile}</p>}
+      </div>
       
       <button
         type="button"

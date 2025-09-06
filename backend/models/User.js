@@ -38,6 +38,7 @@ const userSchema = new mongoose.Schema({
     city: { type: String, trim: true },
     state: { type: String, trim: true },
     pinCode: { type: String, trim: true, index: true }, // Added index
+    mobile: { type: String, trim: true }, // NEW: Added mobile field
   },
   phone: {
     type: String,

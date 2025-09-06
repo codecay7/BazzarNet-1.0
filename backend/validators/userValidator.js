@@ -8,6 +8,9 @@ const addressSchema = Joi.object({
   pinCode: Joi.string().pattern(/^\d{6}$/).messages({
     'string.pattern.base': 'Pin Code must be 6 digits.',
   }).allow(''),
+  mobile: Joi.string().pattern(/^\+?\d{10,15}$/).messages({ // NEW: Added mobile to address
+    'string.pattern.base': 'Mobile number is invalid.',
+  }).allow(''),
 }).default({});
 
 const cardDetailsSchema = Joi.object({

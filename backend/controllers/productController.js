@@ -118,6 +118,15 @@ const createProduct = asyncHandler(async (req, res) => {
     throw new Error('User is not a vendor or does not have an associated store.');
   }
 
+  // NEW: Check if vendor profile is complete
+  const vendorUser = await req.user.populate('storeId'); // Populate store details directly on user
+  if (!vendorUser.description || !vendorUser.category || !vendorUser.phone || 
+      !vendorUser.address?.houseNo || !vendorUser.address?.city || 
+      !vendorUser.address?.state || !vendorUser.address?.pinCode || !vendorUser.address?.mobile) {
+    res.status(400);
+    throw new Error('Please complete your vendor profile (business description, category, contact phone, and full address including mobile) before adding products.');
+  }
+
   const product = new Product({
     name,
     description,

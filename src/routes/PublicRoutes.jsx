@@ -11,6 +11,10 @@ const About = lazy(() => import('../pages/About'));
 const Help = lazy(() => import('../pages/Help'));
 const ForgotPassword = lazy(() => import('../pages/ForgotPassword')); // Import new page
 const ResetPassword = lazy(() => import('../pages/ResetPassword')); // Import new page
+const Careers = lazy(() => import('../pages/Careers')); // NEW: Import Careers page
+const ContactUs = lazy(() => import('../pages/ContactUs')); // NEW: Import ContactUs page
+const PrivacyPolicy = lazy(() => import('../pages/PrivacyPolicy')); // NEW: Import PrivacyPolicy page
+const TermsOfService = lazy(() => import('../pages/TermsOfService')); // NEW: Import TermsOfService page
 
 const PublicRoutes = () => {
   return (
@@ -25,6 +29,10 @@ const PublicRoutes = () => {
           <Route path="/faq" element={<FAQ />} />
           <Route path="/about" element={<About />} />
           <Route path="/help" element={<Help />} />
+          <Route path="/careers" element={<Careers />} /> {/* NEW: Careers route */}
+          <Route path="/contact-us" element={<ContactUs />} /> {/* NEW: Contact Us route */}
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} /> {/* NEW: Privacy Policy route */}
+          <Route path="/terms-of-service" element={<TermsOfService />} /> {/* NEW: Terms of Service route */}
         </Route>
         {/* Catch-all for any other public routes, redirect to home */}
         <Route path="*" element={<Navigate to="/" />} />

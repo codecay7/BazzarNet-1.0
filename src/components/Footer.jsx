@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
 const Footer = () => {
+  // Keep handleExternalClick for social media links if they are not meant to be functional
   const handleExternalClick = (e) => {
     e.preventDefault();
     toast('This is a demo link.');
@@ -21,17 +22,17 @@ const Footer = () => {
           <h4 className="font-semibold mb-3 text-white">Company</h4>
           <Link to="/about" className="block hover:text-gray-100 text-sm mb-2" aria-label="About Us page">About Us</Link>
           <Link to="/faq" className="block hover:text-gray-100 text-sm mb-2" aria-label="Frequently Asked Questions page">FAQ</Link>
-          <a href="#" onClick={handleExternalClick} className="block hover:text-gray-100 text-sm" aria-label="Careers (demo link)">Careers</a>
+          <Link to="/careers" className="block hover:text-gray-100 text-sm" aria-label="Careers page">Careers</Link> {/* UPDATED */}
         </div>
         <div>
           <h4 className="font-semibold mb-3 text-white">Support</h4>
-          <a href="#" onClick={handleExternalClick} className="block hover:text-gray-100 text-sm mb-2" aria-label="Help Center (demo link)">Help Center</a>
-          <a href="#" onClick={handleExternalClick} className="block hover:text-gray-100 text-sm" aria-label="Contact Us (demo link)">Contact Us</a>
+          <Link to="/help" className="block hover:text-gray-100 text-sm mb-2" aria-label="Help Center page">Help Center</Link> {/* UPDATED */}
+          <Link to="/contact-us" className="block hover:text-gray-100 text-sm" aria-label="Contact Us page">Contact Us</Link> {/* UPDATED */}
         </div>
         <div>
           <h4 className="font-semibold mb-3 text-white">Legal</h4>
-          <a href="#" onClick={handleExternalClick} className="block hover:text-gray-100 text-sm mb-2" aria-label="Privacy Policy (demo link)">Privacy Policy</a>
-          <a href="#" onClick={handleExternalClick} className="block hover:text-gray-100 text-sm" aria-label="Terms of Service (demo link)">Terms of Service</a>
+          <Link to="/privacy-policy" className="block hover:text-gray-100 text-sm mb-2" aria-label="Privacy Policy page">Privacy Policy</Link> {/* UPDATED */}
+          <Link to="/terms-of-service" className="block hover:text-gray-100 text-sm" aria-label="Terms of Service page">Terms of Service</Link> {/* UPDATED */}
         </div>
       </div>
       <div className="container mx-auto mt-8 pt-5 border-t border-black/20 flex flex-col sm:flex-row justify-between items-center">

@@ -42,7 +42,7 @@ const Header = () => {
     { name: 'Products', path: '/admin-products' },
     { name: 'Orders', path: '/admin-orders' },
     { name: 'Stores', path: '/admin-stores' },
-    { name: 'Support', path: '/admin-support-tickets' },
+    { name: 'Support', path: '/admin-support-tickets' }, // Admin Support link
   ];
 
   const vendorLinks = [
@@ -156,9 +156,7 @@ const Header = () => {
                       </NavLink>
                     </>
                   )}
-                  <NavLink to="/help" onClick={() => setProfileOpen(false)} className="flex items-center gap-3 px-4 py-2 text-sm hover:bg-white/10" role="menuitem">
-                    <FontAwesomeIcon icon={faQuestionCircle} aria-hidden="true" /> Help
-                  </NavLink>
+                  {/* Removed Help link for admin */}
                   <button onClick={toggleTheme} className="flex items-center gap-3 px-4 py-2 text-sm hover:bg-white/10 w-full" role="menuitem" aria-label={`Toggle ${theme === 'light' ? 'Dark' : 'Light'} Mode`}>
                     <FontAwesomeIcon icon={theme === 'light' ? faMoon : faSun} aria-hidden="true" />
                     <span>{theme === 'light' ? 'Dark' : 'Light'} Mode</span>

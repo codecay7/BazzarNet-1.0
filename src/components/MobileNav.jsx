@@ -27,8 +27,8 @@ const MobileNav = () => {
     { name: 'Products', path: '/admin-products', icon: Package },
     { name: 'Orders', path: '/admin-orders', icon: Receipt },
     { name: 'Stores', path: '/admin-stores', icon: Store },
-    { name: 'Support', path: '/admin-support-tickets', icon: MessageSquareText }, // NEW: Admin Support link
-    { name: 'Help', path: '/help', icon: HelpCircle },
+    { name: 'Support', path: '/admin-support-tickets', icon: MessageSquareText }, // Admin Support link
+    // Removed Help link for admin
     { name: 'Logout', action: handleLogout, icon: LogOut, isLogout: true },
   ];
 

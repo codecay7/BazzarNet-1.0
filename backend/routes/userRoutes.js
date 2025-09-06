@@ -1,5 +1,5 @@
 import express from 'express';
-import { getMe, updateUserProfile, updateUserProfileImage, getPendingReviews } from '../controllers/userController.js'; // Import getPendingReviews
+import { getMe, updateUserProfile, updateUserProfileImage, getPendingReviews, getMySupportTickets } from '../controllers/userController.js'; // Import getMySupportTickets
 import { protect, authorizeRoles } from '../middleware/authMiddleware.js';
 import { validate } from '../middleware/validationMiddleware.js';
 import { updateCustomerProfileSchema, updateVendorProfileSchema } from '../validators/userValidator.js';
@@ -19,5 +19,8 @@ router.put('/me/profile-image', protect, upload.single('image'), updateUserProfi
 
 // Protected route to get products user has purchased and can review
 router.get('/me/pending-reviews', protect, authorizeRoles('customer'), getPendingReviews); // New route
+
+// NEW: Protected route to get support tickets submitted by the current user
+router.get('/me/support-tickets', protect, getMySupportTickets);
 
 export default router;

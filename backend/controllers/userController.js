@@ -3,6 +3,7 @@ import User from '../models/User.js';
 import Store from '../models/Store.js'; // Import Store model
 import Order from '../models/Order.js'; // Import Order model
 import Review from '../models/Review.js'; // Import Review model
+import SupportTicket from '../models/SupportTicket.js'; // NEW: Import SupportTicket model
 import { updateCustomerProfileSchema, updateVendorProfileSchema } from '../validators/userValidator.js'; // Import validators
 
 // @desc    Get current user profile
@@ -235,5 +236,17 @@ const getPendingReviews = asyncHandler(async (req, res) => {
   res.json(productsToReview);
 });
 
+// NEW: @desc    Get support tickets submitted by the current user
+// NEW: @route   GET /api/users/me/support-tickets
+// NEW: @access  Private
+const getMySupportTickets = asyncHandler(async (req, res) => {
+  // Find support tickets where the email matches the logged-in user's email
+  // We use email because the support form allows guests to submit, and we link by email.
+  const tickets = await SupportTicket.find({ email: req.user.email })
+    .sort({ createdAt: -1 }); // Latest first
 
-export { getMe, updateUserProfile, updateUserProfileImage, getPendingReviews };
+  res.json(tickets);
+});
+
+
+export { getMe, updateUserProfile, updateUserProfileImage, getPendingReviews, getMySupportTickets };

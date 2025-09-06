@@ -111,7 +111,7 @@ export const customer = {
   removeFromCart: (itemId) => apiRequest(`/cart/${itemId}`, { method: 'DELETE' }),
   getWishlist: () => apiRequest('/wishlist'),
   addToWishlist: (productId, unit) => apiRequest('/wishlist', { method: 'POST', body: JSON.stringify({ productId, unit }) }),
-  removeFromWishlist: (productId) => apiRequest(`/wishlist/${productId}`, { method: 'DELETE' }),
+  removeFromWishlist: (productId) => apiRequest('/wishlist/${productId}', { method: 'DELETE' }),
   placeOrder: (orderData) => apiRequest('/orders', { method: 'POST', body: JSON.stringify(orderData) }),
   getOrders: (userId, params = {}) => apiRequest(`/orders/user/${userId}${buildQuery(params)}`),
   getOrderById: (orderId) => apiRequest(`/orders/${orderId}`),
@@ -134,6 +134,8 @@ export const admin = {
   initiateRefund: (orderId) => apiRequest(`/admin/orders/${orderId}/refund`, { method: 'POST' }),
   updateStore: (storeId, storeData) => apiRequest(`/admin/stores/${storeId}`, { method: 'PUT', body: JSON.stringify(storeData) }),
   deleteStore: (storeId) => apiRequest(`/admin/stores/${storeId}`, { method: 'DELETE' }),
+  getSupportTickets: (params = {}) => apiRequest(`/support/admin${buildQuery(params)}`), // New
+  updateSupportTicketStatus: (ticketId, statusData) => apiRequest(`/support/admin/${ticketId}/status`, { method: 'PUT', body: JSON.stringify(statusData) }), // New
 };
 
 // --- Upload ---

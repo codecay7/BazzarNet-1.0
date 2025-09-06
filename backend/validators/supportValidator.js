@@ -24,4 +24,12 @@ const submitSupportSchema = Joi.object({
   }),
 });
 
-export { submitSupportSchema };
+const updateSupportTicketStatusSchema = Joi.object({
+  status: Joi.string().valid('Open', 'Resolved', 'Closed').required().messages({
+    'any.only': 'Invalid status for support ticket.',
+    'any.required': 'Status is required.',
+  }),
+  adminNotes: Joi.string().max(1000).allow('').optional(),
+});
+
+export { submitSupportSchema, updateSupportTicketStatusSchema };

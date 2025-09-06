@@ -7,7 +7,7 @@ import { AppContext } from '../context/AppContext';
 import MobileNav from './MobileNav';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Users, Package, Receipt, Store } from 'lucide-react'; // Import Store icon for admin
+import { Users, Package, Receipt, Store, MessageSquareText } from 'lucide-react'; // Import MessageSquareText for admin help
 
 const Header = () => {
   const { sidebarOpen, toggleSidebar, cart, theme, toggleTheme, isVendor, isAdmin, logout } = useContext(AppContext);
@@ -37,7 +37,8 @@ const Header = () => {
     { name: 'Users', path: '/admin-users' },
     { name: 'Products', path: '/admin-products' },
     { name: 'Orders', path: '/admin-orders' },
-    { name: 'Stores', path: '/admin-stores' }, // New admin link
+    { name: 'Stores', path: '/admin-stores' },
+    { name: 'Support', path: '/admin-support-tickets' }, // NEW: Admin Support link
   ];
 
   const vendorLinks = [
@@ -52,9 +53,6 @@ const Header = () => {
   ];
 
   const links = isAdmin ? adminLinks : (isVendor ? vendorLinks : userLinks);
-
-  const navLinkClasses = "relative text-[var(--text)] font-medium px-3 py-2 rounded-md text-sm transition-colors duration-300 hover:text-[var(--accent)]";
-  const activeLinkClasses = "text-[var(--accent)]";
 
   const dropdownVariants = {
     hidden: { opacity: 0, scale: 0.95, y: -10 },
@@ -148,6 +146,9 @@ const Header = () => {
                       </NavLink>
                       <NavLink to="/admin-stores" onClick={() => setProfileOpen(false)} className="flex items-center gap-3 px-4 py-2 text-sm hover:bg-white/10" role="menuitem">
                         <Store size={16} aria-hidden="true" /> Stores
+                      </NavLink>
+                      <NavLink to="/admin-support-tickets" onClick={() => setProfileOpen(false)} className="flex items-center gap-3 px-4 py-2 text-sm hover:bg-white/10" role="menuitem">
+                        <MessageSquareText size={16} aria-hidden="true" /> Support
                       </NavLink>
                     </>
                   )}

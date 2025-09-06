@@ -8,7 +8,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Users, Package, Receipt, Store, ShoppingBag, Heart, Truck, User, Home, 
-  HelpCircle, LogOut, ShoppingCart as LucideShoppingCart, CreditCard // Added CreditCard for vendor payments
+  HelpCircle, LogOut, ShoppingCart as LucideShoppingCart, CreditCard, MessageSquareText // Added CreditCard for vendor payments, MessageSquareText for admin support
 } from 'lucide-react'; // Import Lucide icons
 
 const MobileNav = () => {
@@ -27,6 +27,7 @@ const MobileNav = () => {
     { name: 'Products', path: '/admin-products', icon: Package },
     { name: 'Orders', path: '/admin-orders', icon: Receipt },
     { name: 'Stores', path: '/admin-stores', icon: Store },
+    { name: 'Support', path: '/admin-support-tickets', icon: MessageSquareText }, // NEW: Admin Support link
     { name: 'Help', path: '/help', icon: HelpCircle },
     { name: 'Logout', action: handleLogout, icon: LogOut, isLogout: true },
   ];

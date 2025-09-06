@@ -6,6 +6,7 @@ import SupportTicketCard from './MySupportTicketCard';
 import MySupportTicketDetailModal from './MySupportTicketDetailModal';
 import SkeletonText from './SkeletonText';
 import CreateSupportTicketModal from './CreateSupportTicketModal'; // NEW: Import CreateSupportTicketModal
+import useMySupportTickets from '../hooks/useMySupportTickets'; // NEW: Import the missing hook
 
 const MySupportTicketsSection = () => {
   const { myTickets, loadingMyTickets, errorMyTickets, fetchMySupportTickets, updateMyTicketInList } = useMySupportTickets();

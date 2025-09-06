@@ -130,6 +130,10 @@ const Header = () => {
                       <NavLink to="/orders" onClick={() => setProfileOpen(false)} className="flex items-center gap-3 px-4 py-2 text-sm hover:bg-white/10" role="menuitem">
                         <FontAwesomeIcon icon={faBox} aria-hidden="true" /> Orders
                       </NavLink>
+                      {/* NEW: My Tickets link for customers/vendors */}
+                      <NavLink to="/profile?tab=tickets" onClick={() => setProfileOpen(false)} className="flex items-center gap-3 px-4 py-2 text-sm hover:bg-white/10" role="menuitem">
+                        <MessageSquareText size={16} aria-hidden="true" /> My Tickets
+                      </NavLink>
                     </>
                   )}
                   {isVendor && (

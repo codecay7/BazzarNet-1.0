@@ -1,21 +1,24 @@
 import React, { useContext, useState, useEffect, useCallback } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPen, faSave, faSpinner } from '@fortawesome/free-solid-svg-icons'; // Added faSpinner
+import { faPen, faSave, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { AppContext } from '../context/AppContext';
 import toast from 'react-hot-toast';
 import * as api from '../services/api';
 import useFormValidation from '../hooks/useFormValidation';
+import { useSearchParams } from 'react-router-dom'; // NEW: Import useSearchParams
 
 // Import modular components
 import CustomerProfileForm from '../components/profile/CustomerProfileForm';
 import VendorProfileForm from '../components/profile/VendorProfileForm';
-import MySupportTicketsSection from '../components/MySupportTicketsSection'; // NEW: Import MySupportTicketsSection
+import MySupportTicketsSection from '../components/MySupportTicketsSection';
 
 const Profile = () => {
   const { user, isVendor, updateUserInContext } = useContext(AppContext);
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState('profile'); // NEW: State for active tab
+  const [searchParams, setSearchParams] = useSearchParams(); // NEW: Initialize useSearchParams
+  const [activeTab, setActiveTab] = useState(searchParams.get('tab') || 'profile'); // NEW: Set initial activeTab from URL or default to 'profile'
+
   const [profileData, setProfileData] = useState({
     name: user?.name || '',
     store: user?.store || '', // Only for vendors
@@ -27,7 +30,7 @@ const Profile = () => {
       city: '',
       state: '',
       pinCode: '',
-      mobile: '', // NEW: Added mobile to initial state
+      mobile: '',
     },
     pan: user?.pan || '', // Only for vendors
     gst: user?.gst || '', // Only for vendors
@@ -37,14 +40,14 @@ const Profile = () => {
     bankName: user?.bankName || '', // Only for vendors
     ifsc: user?.ifsc || '', // Only for vendors
     upiId: user?.upiId || '', // Added for customer
-    cardDetails: user?.cardDetails || { // Mock card details for customer
+    cardDetails: user?.cardDetails || {
       cardNumber: '',
       expiry: '',
       cardHolder: ''
     },
     profileImage: user?.profileImage || null,
   });
-  const [originalProfileData, setOriginalProfileData] = useState(null); // NEW: Store original data
+  const [originalProfileData, setOriginalProfileData] = useState(null);
 
   // Define validation logic based on user role
   const profileValidationLogic = useCallback((data) => {
@@ -76,7 +79,7 @@ const Profile = () => {
       } else if (!/^\d{6}$/.test(data.address.pinCode)) {
         newErrors.address = { ...newErrors.address, pinCode: 'Pin Code must be 6 digits.' };
       }
-      if (!data.address.mobile.trim()) { // NEW: Validate mobile
+      if (!data.address.mobile.trim()) {
         newErrors.address = { ...newErrors.address, mobile: 'Mobile number is required.' };
       } else if (!/^\+?\d{10,15}$/.test(data.address.mobile)) {
         newErrors.address = { ...newErrors.address, mobile: 'Mobile number is invalid.' };
@@ -98,8 +101,7 @@ const Profile = () => {
       if (data.gst && !/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/.test(data.gst)) {
         newErrors.gst = 'Invalid GST format.';
       }
-      // Add more vendor-specific validations if needed (bank details, etc.)
-    } else { // Customer specific validations
+    } else {
       if (data.cardDetails) {
         if (data.cardDetails.cardNumber && !/^\d{16}$/.test(data.cardDetails.cardNumber.replace(/\s/g, ''))) {
           newErrors.cardDetails = { ...newErrors.cardDetails, cardNumber: 'Card Number must be 16 digits.' };
@@ -128,7 +130,7 @@ const Profile = () => {
           store: fetchedUser.store || '',
           email: fetchedUser.email || '',
           phone: fetchedUser.phone || '',
-          address: fetchedUser.address || { houseNo: '', landmark: '', city: '', state: '', pinCode: '', mobile: '' }, // NEW: Added mobile
+          address: fetchedUser.address || { houseNo: '', landmark: '', city: '', state: '', pinCode: '', mobile: '' },
           pan: fetchedUser.pan || '',
           gst: fetchedUser.gst || '',
           category: fetchedUser.category || '',
@@ -141,7 +143,6 @@ const Profile = () => {
           profileImage: fetchedUser.profileImage || null,
         };
         setProfileData(initialData);
-        // Do NOT set originalProfileData here, only when entering edit mode
       } catch (error) {
         toast.error(`Failed to load profile: ${error.message}`);
       } finally {
@@ -153,6 +154,16 @@ const Profile = () => {
       fetchProfile();
     }
   }, [user]);
+
+  // NEW: Effect to update activeTab when URL search params change
+  useEffect(() => {
+    const tabFromUrl = searchParams.get('tab');
+    if (tabFromUrl && ['profile', 'tickets'].includes(tabFromUrl)) {
+      setActiveTab(tabFromUrl);
+    } else {
+      setActiveTab('profile'); // Default if invalid or no tab param
+    }
+  }, [searchParams]);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -183,22 +194,21 @@ const Profile = () => {
   };
 
   const handleEditClick = () => {
-    setOriginalProfileData(profileData); // Capture current data when entering edit mode
+    setOriginalProfileData(profileData);
     setIsEditing(true);
   };
 
   const handleCancelEdit = () => {
-    setProfileData(originalProfileData); // Revert to original data
+    setProfileData(originalProfileData);
     setIsEditing(false);
     resetErrors();
-    setOriginalProfileData(null); // Clear original data
+    setOriginalProfileData(null);
   };
 
-  // This function is now called by the child forms' handleSubmitWrapper
   const handleSaveChanges = async () => {
     if (!validate(profileData)) {
       toast.error('Please correct the errors in the form.');
-      return false; // Indicate failure
+      return false;
     }
 
     try {
@@ -208,11 +218,11 @@ const Profile = () => {
       toast.success('Profile updated successfully!');
       setIsEditing(false);
       resetErrors();
-      setOriginalProfileData(null); // Clear original data
-      return true; // Indicate success
+      setOriginalProfileData(null);
+      return true;
     } catch (error) {
       toast.error(`Failed to update profile: ${error.message}`);
-      return false; // Indicate failure
+      return false;
     }
   };
 
@@ -271,10 +281,12 @@ const Profile = () => {
           </div>
         </div>
 
-        {/* NEW: Tabs for Profile and Support Tickets */}
         <div className="flex justify-center bg-black/10 rounded-lg p-1 mb-6 max-w-md mx-auto" role="tablist">
           <button
-            onClick={() => setActiveTab('profile')}
+            onClick={() => {
+              setActiveTab('profile');
+              setSearchParams({ tab: 'profile' }); // NEW: Update URL param
+            }}
             className={`w-1/2 py-2 rounded-md font-semibold transition-colors duration-300 ${activeTab === 'profile' ? 'bg-[var(--accent)] text-white' : 'text-[var(--text)]'}`}
             role="tab"
             aria-selected={activeTab === 'profile'}
@@ -284,7 +296,10 @@ const Profile = () => {
             Profile Details
           </button>
           <button
-            onClick={() => setActiveTab('tickets')}
+            onClick={() => {
+              setActiveTab('tickets');
+              setSearchParams({ tab: 'tickets' }); // NEW: Update URL param
+            }}
             className={`w-1/2 py-2 rounded-md font-semibold transition-colors duration-300 ${activeTab === 'tickets' ? 'bg-[var(--accent)] text-white' : 'text-[var(--text)]'}`}
             role="tab"
             aria-selected={activeTab === 'tickets'}
@@ -295,7 +310,6 @@ const Profile = () => {
           </button>
         </div>
 
-        {/* Tab Content */}
         <div className="mt-8">
           {activeTab === 'profile' && (
             <div role="tabpanel" id="profile-content-panel" aria-labelledby="profile-tab">

@@ -38,6 +38,7 @@ const MobileNav = () => {
     { name: 'Orders', path: '/orders', icon: Truck },
     { name: 'Payments', path: '/payments', icon: CreditCard }, // Added Payments link for vendor
     { name: 'Profile', path: '/profile', icon: User },
+    { name: 'My Tickets', path: '/profile?tab=tickets', icon: MessageSquareText }, // NEW: My Tickets link for vendor
     { name: 'Help', path: '/help', icon: HelpCircle },
     { name: 'Logout', action: handleLogout, icon: LogOut, isLogout: true },
   ];
@@ -50,6 +51,7 @@ const MobileNav = () => {
     { name: 'Wishlist', path: '/wishlist', icon: Heart },
     { name: 'Orders', path: '/orders', icon: Truck },
     { name: 'Profile', path: '/profile', icon: User },
+    { name: 'My Tickets', path: '/profile?tab=tickets', icon: MessageSquareText }, // NEW: My Tickets link for customer
     { name: 'Help', path: '/help', icon: HelpCircle },
     { name: 'Logout', action: handleLogout, icon: LogOut, isLogout: true },
   ];

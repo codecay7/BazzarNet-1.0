@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { MessageSquareText, Search, Filter, Loader2, ChevronDown, PlusCircle } from 'lucide-react'; // Added PlusCircle icon
+import { MessageSquareText, Search, Filter, Loader2, ChevronDown, PlusCircle } from 'lucide-react';
 import toast from 'react-hot-toast';
 import * as api from '../services/api';
-import SupportTicketCard from './MySupportTicketCard';
+import MySupportTicketCard from './MySupportTicketCard'; // NEW: Import MySupportTicketCard
 import MySupportTicketDetailModal from './MySupportTicketDetailModal';
 import SkeletonText from './SkeletonText';
-import CreateSupportTicketModal from './CreateSupportTicketModal'; // NEW: Import CreateSupportTicketModal
-import useMySupportTickets from '../hooks/useMySupportTickets'; // NEW: Import the missing hook
+import CreateSupportTicketModal from './CreateSupportTicketModal';
+import useMySupportTickets from '../hooks/useMySupportTickets';
 
 const MySupportTicketsSection = () => {
   const { myTickets, loadingMyTickets, errorMyTickets, fetchMySupportTickets, updateMyTicketInList } = useMySupportTickets();

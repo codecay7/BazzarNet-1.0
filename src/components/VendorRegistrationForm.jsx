@@ -75,10 +75,10 @@ const VendorRegistrationForm = () => {
       setIsLoading(true);
       try {
         const vendorData = {
-          name: formData.fullName,
+          fullName: formData.fullName, // CORRECTED: Use fullName as key
           email: formData.email,
           password: formData.password,
-          storeName: formData.businessName,
+          businessName: formData.businessName, // CORRECTED: Use businessName as key
           phone: formData.phone,
           // These fields are now optional and will be collected later
           businessDescription: '', 

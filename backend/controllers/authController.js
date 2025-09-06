@@ -57,7 +57,7 @@ const registerUser = asyncHandler(async (req, res) => {
 // @access  Public
 const registerVendor = asyncHandler(async (req, res) => {
   console.log('Backend: registerVendor controller - req.body:', req.body); // NEW LOG
-  const { name, email, password, storeName, businessDescription, category, phone, pan, gst, address } = req.body;
+  const { fullName, email, password, businessName, businessDescription, category, phone, pan, gst, address } = req.body; // Changed to fullName and businessName
 
   const userExists = await User.findOne({ email });
   if (userExists) {
@@ -65,7 +65,7 @@ const registerVendor = asyncHandler(async (req, res) => {
     throw new Error('User with this email already exists');
   }
 
-  const storeExists = await Store.findOne({ name: storeName });
+  const storeExists = await Store.findOne({ name: businessName }); // Check for businessName
   if (storeExists) {
     res.status(400);
     throw new Error('Store with this name already exists');
@@ -73,7 +73,7 @@ const registerVendor = asyncHandler(async (req, res) => {
 
   // Create the vendor user first
   const vendorUser = await User.create({
-    name,
+    name: fullName, // Use fullName for user's name
     email,
     password,
     phone,
@@ -88,7 +88,7 @@ const registerVendor = asyncHandler(async (req, res) => {
   if (vendorUser) {
     // Create the store and link it to the vendor user
     const store = await Store.create({
-      name: storeName,
+      name: businessName, // Use businessName for store's name
       description: businessDescription || 'A new store on BazzarNet.', // Now optional
       owner: vendorUser._id,
       category: category || 'Other', // Now optional with default
@@ -99,7 +99,7 @@ const registerVendor = asyncHandler(async (req, res) => {
 
     // Update the vendor user with store details
     vendorUser.storeId = store._id;
-    vendorUser.store = store.name;
+    vendorUser.store = store.name; // Use store.name (which is businessName)
     await vendorUser.save();
 
     // Send welcome email to vendor

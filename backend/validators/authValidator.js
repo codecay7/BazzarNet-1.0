@@ -37,7 +37,7 @@ const registerUserSchema = Joi.object({
 
 // Schema for vendor registration
 const registerVendorSchema = Joi.object({
-  name: Joi.string().min(3).max(50).required().messages({
+  fullName: Joi.string().min(3).max(50).required().messages({ // Changed to fullName
     'string.empty': 'Full Name is required.',
     'string.min': 'Full Name must be at least 3 characters long.',
     'string.max': 'Full Name cannot exceed 50 characters.',
@@ -53,7 +53,7 @@ const registerVendorSchema = Joi.object({
     'string.min': 'Password must be at least 6 characters long.',
     'any.required': 'Password is required.',
   }),
-  storeName: Joi.string().min(3).max(100).required().messages({
+  businessName: Joi.string().min(3).max(100).required().messages({ // Changed to businessName
     'string.empty': 'Business Name is required.',
     'string.min': 'Business Name must be at least 3 characters long.',
     'string.max': 'Business Name cannot exceed 100 characters.',

@@ -7,8 +7,8 @@ const Register = () => {
   const [activeTab, setActiveTab] = useState('user');
 
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center bg-[var(--bg-body)] p-4">
-      <div className="bg-[var(--card-bg)] backdrop-blur-[5px] border border-white/30 rounded-2xl flex flex-col p-8 shadow-[0_8px_40px_var(--shadow)] w-full max-w-[500px] mx-4 text-center text-[var(--auth-text)]">
+    <div className="min-h-screen flex flex-col items-center bg-[var(--bg-body)] p-4 overflow-y-auto">
+      <div className="bg-[var(--card-bg)] backdrop-blur-[5px] border border-white/30 rounded-2xl flex flex-col p-6 sm:p-8 shadow-[0_8px_40px_var(--shadow)] w-full max-w-[500px] mx-4 text-center text-[var(--auth-text)]">
         <h2 className="text-3xl font-bold mb-6 text-[var(--accent)]">Create Your Account</h2>
         
         <div className="flex justify-center bg-black/10 rounded-lg p-1 mb-6" role="tablist">

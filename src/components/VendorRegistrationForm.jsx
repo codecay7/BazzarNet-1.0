@@ -29,45 +29,47 @@ const VendorRegistrationForm = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const validateForm = () => {
+  const validateForm = (dataToValidate) => { // Changed to accept dataToValidate
+    console.log('Validating with data:', dataToValidate); // Debug log
     let newErrors = {};
-    if (!formData.fullName.trim()) {
+    if (!dataToValidate.fullName.trim()) {
       newErrors.fullName = 'Full Name is required.';
-    } else if (formData.fullName.trim().length < 3) {
+    } else if (dataToValidate.fullName.trim().length < 3) {
       newErrors.fullName = 'Full Name must be at least 3 characters long.';
-    } else if (formData.fullName.trim().length > 50) {
+    } else if (dataToValidate.fullName.trim().length > 50) {
       newErrors.fullName = 'Full Name cannot exceed 50 characters.';
     }
-    if (!formData.businessName.trim()) {
+    if (!dataToValidate.businessName.trim()) {
       newErrors.businessName = 'Business Name is required.';
-    } else if (formData.businessName.trim().length < 3) {
+    } else if (dataToValidate.businessName.trim().length < 3) {
       newErrors.businessName = 'Business Name must be at least 3 characters long.';
-    } else if (formData.businessName.trim().length > 100) {
+    } else if (dataToValidate.businessName.trim().length > 100) {
       newErrors.businessName = 'Business Name cannot exceed 100 characters.';
     }
-    if (!formData.email.trim()) {
+    if (!dataToValidate.email.trim()) {
       newErrors.email = 'Email is required.';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+    } else if (!/\S+@\S+\.\S+/.test(dataToValidate.email)) {
       newErrors.email = 'Email address is invalid.';
     }
-    if (!formData.phone.trim()) {
+    if (!dataToValidate.phone.trim()) {
       newErrors.phone = 'Phone number is required.';
-    } else if (!/^\+?\d{10,15}$/.test(formData.phone)) {
+    } else if (!/^\+?\d{10,15}$/.test(dataToValidate.phone)) {
       newErrors.phone = 'Phone number is invalid.';
     }
-    if (!formData.password) {
+    if (!dataToValidate.password) {
       newErrors.password = 'Password is required.';
-    } else if (formData.password.length < 6) {
+    } else if (dataToValidate.password.length < 6) {
       newErrors.password = 'Password must be at least 6 characters long.';
     }
-    // Removed validation for pan, gst, address, description, category
     setErrors(newErrors);
+    console.log('Validation errors:', newErrors); // Debug log
     return Object.keys(newErrors).length === 0;
   };
 
   const handleRegistration = async (e) => {
     e.preventDefault();
-    if (validateForm()) {
+    console.log('handleRegistration: formData before validation:', formData); // Debug log
+    if (validateForm(formData)) { // Pass formData explicitly
       setIsLoading(true);
       try {
         const vendorData = {

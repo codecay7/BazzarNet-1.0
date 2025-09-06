@@ -7,7 +7,7 @@
       "config": { "includeFiles": ["backend/**"] }
     },
     {
-      "src": "package.json",  <-- THIS LINE MUST BE "package.json"
+      "src": "package.json",
       "use": "@vercel/static-build",
       "config": { "distDir": "dist" }
     }

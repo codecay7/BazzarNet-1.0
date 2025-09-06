@@ -6,8 +6,8 @@
   "type": "module",
   "scripts": {
     "start": "node server.js",
-    "server": "nodemon server.js",
     "dev": "nodemon server.js",
+    "server": "nodemon server.js",
     "seed": "node seeder.js",
     "destroy": "node seeder.js -d",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --detectOpenHandles"

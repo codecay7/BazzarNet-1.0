@@ -1,6 +1,6 @@
 const validate = (schema) => (req, res, next) => {
   // Log the request body before validation to inspect its structure
-  console.log('Backend: Validating request body:', req.body); 
+  console.log('Backend: Request body before validation:', req.body); 
   const { error } = schema.validate(req.body, { abortEarly: false }); // abortEarly: false collects all errors
 
   if (error) {

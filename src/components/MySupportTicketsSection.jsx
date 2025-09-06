@@ -1,16 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { MessageSquareText, Search, Filter, Loader2, ChevronDown } from 'lucide-react';
-import useMySupportTickets from '../hooks/useMySupportTickets';
-import MySupportTicketCard from './MySupportTicketCard';
+import React, { useState, useEffect, useCallback } from 'react';
+import { MessageSquareText, Search, Filter, Loader2, ChevronDown, PlusCircle } from 'lucide-react'; // Added PlusCircle icon
+import toast from 'react-hot-toast';
+import * as api from '../services/api';
+import SupportTicketCard from './MySupportTicketCard';
 import MySupportTicketDetailModal from './MySupportTicketDetailModal';
 import SkeletonText from './SkeletonText';
+import CreateSupportTicketModal from './CreateSupportTicketModal'; // NEW: Import CreateSupportTicketModal
 
 const MySupportTicketsSection = () => {
   const { myTickets, loadingMyTickets, errorMyTickets, fetchMySupportTickets, updateMyTicketInList } = useMySupportTickets();
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('all'); // 'all', 'Open', 'Resolved', 'Closed'
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false); // Renamed for clarity
   const [selectedTicket, setSelectedTicket] = useState(null);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false); // NEW: State for create modal
 
   useEffect(() => {
     // Refetch tickets when filters change
@@ -19,12 +22,25 @@ const MySupportTicketsSection = () => {
 
   const handleCardClick = (ticket) => {
     setSelectedTicket(ticket);
-    setIsModalOpen(true);
+    setIsDetailModalOpen(true);
   };
 
-  const handleModalClose = () => {
-    setIsModalOpen(false);
+  const handleDetailModalClose = () => {
+    setIsDetailModalOpen(false);
     setSelectedTicket(null);
+  };
+
+  const handleCreateModalOpen = () => {
+    setIsCreateModalOpen(true);
+  };
+
+  const handleCreateModalClose = () => {
+    setIsCreateModalOpen(false);
+  };
+
+  const handleNewTicketCreated = () => {
+    fetchMySupportTickets(); // Refresh the list of tickets
+    handleCreateModalClose(); // Close the modal
   };
 
   const filteredTickets = myTickets.filter(ticket => {
@@ -38,9 +54,18 @@ const MySupportTicketsSection = () => {
 
   return (
     <div className="space-y-6">
-      <h3 className="text-2xl font-bold mb-4 flex items-center gap-3">
-        <MessageSquareText className="text-[var(--accent)]" /> My Support Tickets
-      </h3>
+      <div className="flex justify-between items-center mb-4"> {/* NEW: Flex container for title and button */}
+        <h3 className="text-2xl font-bold flex items-center gap-3">
+          <MessageSquareText className="text-[var(--accent)]" /> My Support Tickets
+        </h3>
+        <button
+          onClick={handleCreateModalOpen}
+          className="bg-[var(--accent)] text-white py-2 px-4 rounded-lg flex items-center gap-2 font-medium hover:bg-[var(--accent-dark)] transition-colors"
+          aria-label="Create new support ticket"
+        >
+          <PlusCircle size={20} /> Create Ticket
+        </button>
+      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
         <div className="relative">
@@ -104,11 +129,18 @@ const MySupportTicketsSection = () => {
 
       {selectedTicket && (
         <MySupportTicketDetailModal
-          isOpen={isModalOpen}
-          onClose={handleModalClose}
+          isOpen={isDetailModalOpen}
+          onClose={handleDetailModalClose}
           ticket={selectedTicket}
         />
       )}
+
+      {/* NEW: Create Support Ticket Modal */}
+      <CreateSupportTicketModal
+        isOpen={isCreateModalOpen}
+        onClose={handleCreateModalClose}
+        onTicketCreated={handleNewTicketCreated}
+      />
     </div>
   );
 };

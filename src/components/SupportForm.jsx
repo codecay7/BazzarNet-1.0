@@ -7,7 +7,7 @@ import { Mail, MessageSquareText } from 'lucide-react';
 
 const inputClasses = "w-full p-2 rounded-lg bg-white/10 border border-black/30 focus:outline-none focus:ring-2 focus:ring-[var(--accent)] text-[var(--text)]";
 
-const SupportForm = ({ onClose }) => {
+const SupportForm = ({ onClose, onSuccess }) => { // NEW: Added onSuccess prop
   const { user, isLoggedIn } = useContext(AppContext);
   const [formData, setFormData] = useState({
     name: user?.name || '',
@@ -16,6 +16,7 @@ const SupportForm = ({ onClose }) => {
     subject: '',
     message: '',
   });
+  const [isSubmitting, setIsSubmitting] = useState(false); // NEW: Loading state for submission
 
   const supportValidationLogic = useCallback((data) => {
     let newErrors = {};
@@ -50,12 +51,18 @@ const SupportForm = ({ onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (validate(formData)) {
+      setIsSubmitting(true); // Start loading
       try {
         const response = await api.general.submitSupportRequest(formData);
         toast.success(response.message);
         onClose(); // Close modal on success
+        if (onSuccess) { // NEW: Call onSuccess callback
+          onSuccess();
+        }
       } catch (error) {
         toast.error(error.message || 'Failed to submit support request.');
+      } finally {
+        setIsSubmitting(false); // End loading
       }
     } else {
       toast.error('Please correct the errors in the form.');
@@ -73,7 +80,7 @@ const SupportForm = ({ onClose }) => {
           value={formData.name}
           onChange={handleChange}
           className={inputClasses}
-          disabled={isLoggedIn} // Disable if logged in
+          disabled={isLoggedIn || isSubmitting} // Disable if logged in or submitting
           aria-invalid={!!errors.name}
           aria-describedby={errors.name ? "supportName-error" : undefined}
         />
@@ -88,7 +95,7 @@ const SupportForm = ({ onClose }) => {
           value={formData.email}
           onChange={handleChange}
           className={inputClasses}
-          disabled={isLoggedIn} // Disable if logged in
+          disabled={isLoggedIn || isSubmitting} // Disable if logged in or submitting
           aria-invalid={!!errors.email}
           aria-describedby={errors.email ? "supportEmail-error" : undefined}
         />
@@ -105,6 +112,7 @@ const SupportForm = ({ onClose }) => {
           className={inputClasses}
           aria-invalid={!!errors.subject}
           aria-describedby={errors.subject ? "supportSubject-error" : undefined}
+          disabled={isSubmitting}
         />
         {errors.subject && <p id="supportSubject-error" className="text-red-400 text-xs mt-1">{errors.subject}</p>}
       </div>
@@ -119,6 +127,7 @@ const SupportForm = ({ onClose }) => {
           className={inputClasses}
           aria-invalid={!!errors.message}
           aria-describedby={errors.message ? "supportMessage-error" : undefined}
+          disabled={isSubmitting}
         ></textarea>
         {errors.message && <p id="supportMessage-error" className="text-red-400 text-xs mt-1">{errors.message}</p>}
       </div>
@@ -127,14 +136,16 @@ const SupportForm = ({ onClose }) => {
           type="button"
           onClick={onClose}
           className="bg-white/10 text-[var(--text)] py-2 px-6 rounded-lg font-medium hover:bg-white/20 transition-colors"
+          disabled={isSubmitting}
         >
           Cancel
         </button>
         <button
           type="submit"
           className="bg-[var(--accent)] text-white py-2 px-6 rounded-lg flex items-center gap-2 font-medium hover:bg-[var(--accent-dark)] transition-colors"
+          disabled={isSubmitting}
         >
-          <Mail size={20} /> Send Request
+          {isSubmitting ? <Loader2 size={20} className="animate-spin" /> : <Mail size={20} />} Send Request
         </button>
       </div>
     </form>

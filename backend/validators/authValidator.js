@@ -59,48 +59,27 @@ const registerVendorSchema = Joi.object({
     'string.max': 'Business Name cannot exceed 100 characters.',
     'any.required': 'Business Name is required.',
   }),
-  businessDescription: Joi.string().min(10).max(500).required().messages({
-    'string.empty': 'Business Description is required.',
-    'string.min': 'Business Description must be at least 10 characters long.',
-    'string.max': 'Business Description cannot exceed 500 characters.',
-    'any.required': 'Business Description is required.',
-  }),
-  category: Joi.string().valid('Groceries', 'Bakery', 'Butcher', 'Cafe', 'Electronics', 'Furniture', 'Decor', 'Clothing', 'Other').required().messages({
-    'string.empty': 'Category is required.',
-    'any.only': 'Please select a valid category.',
-    'any.required': 'Category is required.',
-  }),
+  businessDescription: Joi.string().min(10).max(500).optional().allow(''), // Made optional
+  category: Joi.string().valid('Groceries', 'Bakery', 'Butcher', 'Cafe', 'Electronics', 'Furniture', 'Decor', 'Clothing', 'Other').optional().default('Other'), // Made optional with default
   phone: Joi.string().pattern(/^\+?\d{10,15}$/).required().messages({
     'string.empty': 'Phone number is required.',
     'string.pattern.base': 'Phone number is invalid.',
     'any.required': 'Phone number is required.',
   }),
-  pan: Joi.string().pattern(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/).required().messages({
-    'string.empty': 'PAN is required.',
-    'string.pattern.base': 'Invalid PAN format.',
-    'any.required': 'PAN is required.',
-  }),
-  gst: Joi.string().pattern(/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/).messages({
-    'string.pattern.base': 'Invalid GST format.',
-  }).allow(''),
-  address: Joi.object({
-    houseNo: Joi.string().trim().required().messages({ 'string.empty': 'House No. is required.' }),
+  pan: Joi.string().pattern(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/).optional().allow(''), // Made optional
+  gst: Joi.string().pattern(/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/).optional().allow(''), // Made optional
+  address: Joi.object({ // Made address object optional, and its fields optional
+    houseNo: Joi.string().trim().allow(''),
     landmark: Joi.string().trim().allow(''),
-    city: Joi.string().trim().required().messages({ 'string.empty': 'City is required.' }),
-    state: Joi.string().trim().required().messages({ 'string.empty': 'State is required.' }),
-    pinCode: Joi.string().pattern(/^\d{6}$/).required().messages({
-      'string.empty': 'Pin Code is required.',
+    city: Joi.string().trim().allow(''),
+    state: Joi.string().trim().allow(''),
+    pinCode: Joi.string().pattern(/^\d{6}$/).messages({
       'string.pattern.base': 'Pin Code must be 6 digits.',
-    }),
-    mobile: Joi.string().pattern(/^\+?\d{10,15}$/).required().messages({ // NEW: Added mobile to address
-      'string.empty': 'Mobile number is required.',
+    }).allow(''),
+    mobile: Joi.string().pattern(/^\+?\d{10,15}$/).messages({
       'string.pattern.base': 'Mobile number is invalid.',
-      'any.required': 'Mobile number is required.',
-    }),
-  }).required().messages({
-    'object.base': 'Address is required.',
-    'any.required': 'Address is required.',
-  }),
+    }).allow(''),
+  }).optional().default({}),
 });
 
 // Schema for login (common for all roles)

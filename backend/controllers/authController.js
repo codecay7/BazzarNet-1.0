@@ -76,9 +76,11 @@ const registerVendor = asyncHandler(async (req, res) => {
     email,
     password,
     phone,
-    pan,
-    gst,
-    address,
+    pan: pan || undefined, // Now optional
+    gst: gst || undefined, // Now optional
+    address: address || undefined, // Now optional
+    description: businessDescription || undefined, // Now optional
+    category: category || 'Other', // Now optional with default
     role: 'vendor',
   });
 
@@ -86,12 +88,12 @@ const registerVendor = asyncHandler(async (req, res) => {
     // Create the store and link it to the vendor user
     const store = await Store.create({
       name: storeName,
-      description: businessDescription,
+      description: businessDescription || 'A new store on BazzarNet.', // Now optional
       owner: vendorUser._id,
-      category,
-      address,
-      phone,
-      email,
+      category: category || 'Other', // Now optional with default
+      address: address || { houseNo: '', landmark: '', city: '', state: '', pinCode: '', mobile: '' }, // Now optional
+      phone: phone,
+      email: email,
     });
 
     // Update the vendor user with store details

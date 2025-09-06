@@ -3,18 +3,11 @@ import { AppContext } from '../context/AppContext';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
-import { ChevronDown, Eye, EyeOff } from 'lucide-react'; // Import Lucide icons
+import { ChevronDown, Eye, EyeOff } from 'lucide-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
-const indianStates = [
-  "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh",
-  "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand",
-  "Karnataka", "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur",
-  "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Punjab",
-  "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura",
-  "Uttar Pradesh", "Uttarakhand", "West Bengal"
-];
+// Removed indianStates and categories as they are no longer needed in this initial form
 
 const VendorRegistrationForm = () => {
   const { registerVendor } = useContext(AppContext);
@@ -23,44 +16,17 @@ const VendorRegistrationForm = () => {
     fullName: '',
     businessName: '',
     email: '',
-    phone: '',
-    pan: '',
-    gst: '',
-    address: {
-      houseNo: '',
-      landmark: '',
-      city: '',
-      state: '',
-      pinCode: '',
-      mobile: '', // NEW: Mobile field
-    },
-    description: '',
-    category: 'Groceries',
+    phone: '', // Personal phone for the vendor
     password: '',
+    // Removed pan, gst, address, description, category from initial state
   });
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false); // New state
-
-  const categories = [
-    'Groceries', 'Bakery', 'Butcher', 'Cafe', 'Electronics', 
-    'Furniture', 'Decor', 'Clothing', 'Other'
-  ];
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    if (name.startsWith('address.')) {
-      const field = name.split('.')[1];
-      setFormData(prev => ({
-        ...prev,
-        address: {
-          ...prev.address,
-          [field]: value
-        }
-      }));
-    } else {
-      setFormData(prev => ({ ...prev, [name]: value }));
-    }
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   const validateForm = () => {
@@ -89,52 +55,12 @@ const VendorRegistrationForm = () => {
     } else if (!/^\+?\d{10,15}$/.test(formData.phone)) {
       newErrors.phone = 'Phone number is invalid.';
     }
-    if (!formData.pan.trim()) {
-      newErrors.pan = 'PAN is required.';
-    } else if (!/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(formData.pan)) {
-      newErrors.pan = 'Invalid PAN format.';
-    }
-    
-    // Address validation
-    let addressErrors = {};
-    if (!formData.address.houseNo.trim()) {
-      addressErrors.houseNo = 'House No. is required.';
-    }
-    if (!formData.address.city.trim()) {
-      addressErrors.city = 'City is required.';
-    }
-    if (!formData.address.state.trim()) {
-      addressErrors.state = 'State is required.';
-    }
-    if (!formData.address.pinCode.trim()) {
-      addressErrors.pinCode = 'Pin Code is required.';
-    } else if (!/^\d{6}$/.test(formData.address.pinCode)) {
-      addressErrors.pinCode = 'Pin Code must be 6 digits.';
-    }
-    if (!formData.address.mobile.trim()) { // NEW: Validate mobile
-      addressErrors.mobile = 'Mobile number is required.';
-    } else if (!/^\+?\d{10,15}$/.test(formData.address.mobile)) {
-      addressErrors.mobile = 'Mobile number is invalid.';
-    }
-    if (Object.keys(addressErrors).length > 0) {
-      newErrors.address = addressErrors;
-    }
-
-    if (!formData.description.trim()) {
-      newErrors.description = 'Business Description is required.';
-    } else if (formData.description.trim().length < 10) {
-      newErrors.description = 'Business Description must be at least 10 characters long.';
-    } else if (formData.description.trim().length > 500) {
-      newErrors.description = 'Business Description cannot exceed 500 characters.';
-    }
-    if (!formData.category) {
-      newErrors.category = 'Category is required.';
-    }
     if (!formData.password) {
       newErrors.password = 'Password is required.';
     } else if (formData.password.length < 6) {
       newErrors.password = 'Password must be at least 6 characters long.';
     }
+    // Removed validation for pan, gst, address, description, category
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -149,14 +75,23 @@ const VendorRegistrationForm = () => {
           email: formData.email,
           password: formData.password,
           storeName: formData.businessName,
-          businessDescription: formData.description,
-          category: formData.category,
           phone: formData.phone,
-          pan: formData.pan,
-          gst: formData.gst || '',
-          address: formData.address,
+          // These fields are now optional and will be collected later
+          businessDescription: '', 
+          category: 'Other', // Default category
+          pan: '',
+          gst: '',
+          address: {
+            houseNo: '',
+            landmark: '',
+            city: '',
+            state: '',
+            pinCode: '',
+            mobile: '',
+          },
         };
         if (await registerVendor(vendorData)) {
+          toast.success('Registration successful! Please complete your store profile with business details, address, and payment info before adding products.', { duration: 6000 });
           navigate('/dashboard');
         }
       } finally {
@@ -246,158 +181,8 @@ const VendorRegistrationForm = () => {
           />
           {errors.phone && <p id="vendorPhone-error" className="text-red-400 text-xs mt-1">{errors.phone}</p>}
         </div>
-        <div>
-          <label htmlFor="vendorPan" className="text-sm font-medium">PAN</label>
-          <input 
-            type="text" 
-            id="vendorPan"
-            name="pan" 
-            value={formData.pan} 
-            onChange={handleChange} 
-            className={inputClasses} 
-            aria-invalid={!!errors.pan}
-            aria-describedby={errors.pan ? "vendorPan-error" : undefined}
-            disabled={isLoading}
-          />
-          {errors.pan && <p id="vendorPan-error" className="text-red-400 text-xs mt-1">{errors.pan}</p>}
-        </div>
-        <div>
-          <label htmlFor="vendorGst" className="text-sm font-medium">GST (optional)</label>
-          <input 
-            type="text" 
-            id="vendorGst"
-            name="gst" 
-            value={formData.gst} 
-            onChange={handleChange} 
-            className={inputClasses} 
-            disabled={isLoading}
-          />
-        </div>
       </div>
-      <div>
-        <label htmlFor="vendorAddressHouseNo" className="text-sm font-medium">House No., Street</label>
-        <input 
-          type="text" 
-          id="vendorAddressHouseNo"
-          name="address.houseNo" 
-          value={formData.address.houseNo} 
-          onChange={handleChange} 
-          className={inputClasses} 
-          aria-invalid={!!errors.address?.houseNo}
-          aria-describedby={errors.address?.houseNo ? "vendorAddressHouseNo-error" : undefined}
-          disabled={isLoading}
-        />
-        {errors.address?.houseNo && <p id="vendorAddressHouseNo-error" className="text-red-400 text-xs mt-1">{errors.address.houseNo}</p>}
-      </div>
-      <div>
-        <label htmlFor="vendorAddressLandmark" className="text-sm font-medium">Landmark (optional)</label>
-        <input 
-          type="text" 
-          id="vendorAddressLandmark"
-          name="address.landmark" 
-          value={formData.address.landmark} 
-          onChange={handleChange} 
-          className={inputClasses} 
-          disabled={isLoading}
-        />
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <label htmlFor="vendorAddressCity" className="text-sm font-medium">City</label>
-          <input 
-            type="text" 
-            id="vendorAddressCity"
-            name="address.city" 
-            value={formData.address.city} 
-            onChange={handleChange} 
-            className={inputClasses} 
-            aria-invalid={!!errors.address?.city}
-            aria-describedby={errors.address?.city ? "vendorAddressCity-error" : undefined}
-            disabled={isLoading}
-          />
-          {errors.address?.city && <p id="vendorAddressCity-error" className="text-red-400 text-xs mt-1">{errors.address.city}</p>}
-        </div>
-        <div className="relative">
-          <label htmlFor="vendorAddressState" className="text-sm font-medium">State</label>
-          <select 
-            name="address.state" 
-            id="vendorAddressState"
-            value={formData.address.state} 
-            onChange={handleChange} 
-            className={`${inputClasses} appearance-none pr-8`}
-            aria-invalid={!!errors.address?.state}
-            aria-describedby={errors.address?.state ? "vendorAddressState-error" : undefined}
-            disabled={isLoading}
-          >
-            <option value="" disabled>Select State</option>
-            {indianStates.map(state => <option key={state} value={state}>{state}</option>)}
-          </select>
-          <div className="pointer-events-none absolute inset-y-0 right-0 top-5 flex items-center px-2 text-[var(--text)]" aria-hidden="true"><ChevronDown size={20} /></div>
-          {errors.address?.state && <p id="vendorAddressState-error" className="text-red-400 text-xs mt-1">{errors.address.state}</p>}
-        </div>
-      </div>
-      <div>
-        <label htmlFor="vendorAddressPinCode" className="text-sm font-medium">Pin Code</label>
-        <input 
-          type="text" 
-          id="vendorAddressPinCode"
-          name="address.pinCode" 
-          value={formData.address.pinCode} 
-          onChange={handleChange} 
-          className={inputClasses} 
-          aria-invalid={!!errors.address?.pinCode}
-          aria-describedby={errors.address?.pinCode ? "vendorAddressPinCode-error" : undefined}
-          disabled={isLoading}
-        />
-        {errors.address?.pinCode && <p id="vendorAddressPinCode-error" className="text-red-400 text-xs mt-1">{errors.address.pinCode}</p>}
-      </div>
-      <div>
-        <label htmlFor="vendorAddressMobile" className="text-sm font-medium">Mobile Number</label> {/* NEW: Mobile input */}
-        <input 
-          type="tel" 
-          id="vendorAddressMobile"
-          name="address.mobile" 
-          value={formData.address.mobile} 
-          onChange={handleChange} 
-          className={inputClasses} 
-          aria-invalid={!!errors.address?.mobile}
-          aria-describedby={errors.address?.mobile ? "vendorAddressMobile-error" : undefined}
-          disabled={isLoading}
-        />
-        {errors.address?.mobile && <p id="vendorAddressMobile-error" className="text-red-400 text-xs mt-1">{errors.address.mobile}</p>}
-      </div>
-      <div>
-        <label htmlFor="vendorDescription" className="text-sm font-medium">Business Description</label>
-        <textarea 
-          name="description" 
-          id="vendorDescription"
-          rows="2" 
-          value={formData.description} 
-          onChange={handleChange} 
-          className={inputClasses}
-          aria-invalid={!!errors.description}
-          aria-describedby={errors.description ? "vendorDescription-error" : undefined}
-          disabled={isLoading}
-        ></textarea>
-        {errors.description && <p id="vendorDescription-error" className="text-red-400 text-xs mt-1">{errors.description}</p>}
-      </div>
-      <div className="relative">
-        <label htmlFor="vendorCategory" className="text-sm font-medium">Category</label>
-        <select 
-          name="category" 
-          id="vendorCategory"
-          value={formData.category} 
-          onChange={handleChange} 
-          className={`${inputClasses} appearance-none pr-8`}
-          aria-invalid={!!errors.category}
-          aria-describedby={errors.category ? "vendorCategory-error" : undefined}
-          disabled={isLoading}
-        >
-          {categories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
-        </select>
-        <div className="pointer-events-none absolute inset-y-0 right-0 top-5 flex items-center px-2 text-[var(--text)]" aria-hidden="true"><ChevronDown size={20} /></div>
-        {errors.category && <p id="vendorCategory-error" className="text-red-400 text-xs mt-1">{errors.category}</p>}
-      </div>
+      {/* Removed PAN, GST, Address, Description, Category fields */}
       <div>
         <label htmlFor="vendorPassword" className="text-sm font-medium">Password</label>
         <div className="relative w-full">

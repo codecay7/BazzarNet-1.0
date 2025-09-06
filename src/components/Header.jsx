@@ -13,8 +13,12 @@ const Header = () => {
   const { sidebarOpen, toggleSidebar, cart, theme, toggleTheme, isVendor, isAdmin, logout } = useContext(AppContext);
   const [profileOpen, setProfileOpen] = useState(false);
   const profileRef = useRef(null);
-  const cartItemCount = cart.reduce((sum, item) => sum + item.quantity, 0); // Use cart from context
+  const cartItemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
   const navigate = useNavigate();
+
+  // Define navigation link classes
+  const navLinkClasses = "relative text-[var(--text)] hover:text-[var(--accent)] transition-colors duration-200 py-2 px-3 rounded-md text-lg font-medium";
+  const activeLinkClasses = "text-[var(--accent)]";
 
   const handleLogout = () => {
     logout();
@@ -38,7 +42,7 @@ const Header = () => {
     { name: 'Products', path: '/admin-products' },
     { name: 'Orders', path: '/admin-orders' },
     { name: 'Stores', path: '/admin-stores' },
-    { name: 'Support', path: '/admin-support-tickets' }, // NEW: Admin Support link
+    { name: 'Support', path: '/admin-support-tickets' },
   ];
 
   const vendorLinks = [
@@ -82,7 +86,7 @@ const Header = () => {
         </div>
 
         <div className="flex items-center gap-4">
-          {!isVendor && !isAdmin && ( // Hide cart/wishlist for vendors and admins
+          {!isVendor && !isAdmin && (
             <div className="hidden md:flex items-center gap-4 border border-white/20 rounded-full px-4 py-2">
               <NavLink to="/cart" className="relative text-[var(--text)] hover:text-[var(--accent)] transition-colors duration-200" aria-label={`Shopping Cart with ${cartItemCount} items`}>
                 <FontAwesomeIcon icon={faShoppingCart} className="text-xl" />
@@ -118,7 +122,7 @@ const Header = () => {
                   className="absolute top-14 right-0 w-48 bg-[var(--card-bg)] border border-white/10 rounded-lg shadow-lg flex flex-col py-1"
                   role="menu"
                 >
-                  {!isAdmin && ( // Profile and Orders are not for admin in this context
+                  {!isAdmin && (
                     <>
                       <NavLink to="/profile" onClick={() => setProfileOpen(false)} className="flex items-center gap-3 px-4 py-2 text-sm hover:bg-white/10" role="menuitem">
                         <FontAwesomeIcon icon={faIdCard} aria-hidden="true" /> Profile

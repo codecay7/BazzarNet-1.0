@@ -56,6 +56,7 @@ const registerUser = asyncHandler(async (req, res) => {
 // @route   POST /api/auth/register/vendor
 // @access  Public
 const registerVendor = asyncHandler(async (req, res) => {
+  console.log('Backend: registerVendor controller - req.body:', req.body); // NEW LOG
   const { name, email, password, storeName, businessDescription, category, phone, pan, gst, address } = req.body;
 
   const userExists = await User.findOne({ email });

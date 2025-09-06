@@ -72,7 +72,7 @@ if (env.NODE_ENV === 'development') {
 
 
 // Middleware
-app.use(express.json()); 
+app.use(express.json()); // Moved to be the very first middleware
 app.use(cors());
 
 // New: Data sanitization against NoSQL query injection

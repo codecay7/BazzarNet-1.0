@@ -166,11 +166,11 @@ export const AppProvider = ({ children }) => {
   const registerVendor = useCallback(async (vendorData) => {
     try {
       const response = await api.auth.registerVendor({
-        name: vendorData.fullName,
+        fullName: vendorData.fullName, // CORRECTED: Use fullName as key
         email: vendorData.email,
         password: vendorData.password,
-        storeName: vendorData.businessName,
-        businessDescription: vendorData.description,
+        businessName: vendorData.businessName, // CORRECTED: Use businessName as key
+        businessDescription: vendorData.businessDescription,
         category: vendorData.category,
         phone: vendorData.phone,
         pan: vendorData.pan,

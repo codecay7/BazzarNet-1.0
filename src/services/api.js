@@ -101,6 +101,7 @@ export const vendor = {
   confirmDelivery: (orderId, otp) => apiRequest(`/orders/${orderId}/confirm-delivery`, { method: 'POST', body: JSON.stringify({ otp }) }),
   getPayments: (vendorId, params = {}) => apiRequest(`/payments/vendor/${vendorId}${buildQuery(params)}`),
   reportPaymentIssue: (paymentId) => apiRequest(`/payments/${paymentId}/report-issue`, { method: 'POST' }),
+  getMySupportTickets: () => apiRequest('/users/me/support-tickets'), // NEW: Added for vendor
 };
 
 // --- Customer ---
@@ -118,6 +119,7 @@ export const customer = {
   createProductReview: (productId, reviewData) => apiRequest(`/products/${productId}/reviews`, { method: 'POST', body: JSON.stringify(reviewData) }), // New
   getProductReviews: (productId) => apiRequest(`/products/${productId}/reviews`), // New
   getPendingReviews: () => apiRequest('/users/me/pending-reviews'), // New
+  getMySupportTickets: () => apiRequest('/users/me/support-tickets'), // NEW: Added for customer
 };
 
 // --- Admin ---
@@ -134,8 +136,8 @@ export const admin = {
   initiateRefund: (orderId) => apiRequest(`/admin/orders/${orderId}/refund`, { method: 'POST' }),
   updateStore: (storeId, storeData) => apiRequest(`/admin/stores/${storeId}`, { method: 'PUT', body: JSON.stringify(storeData) }),
   deleteStore: (storeId) => apiRequest(`/admin/stores/${storeId}`, { method: 'DELETE' }),
-  getSupportTickets: (params = {}) => apiRequest(`/support/admin${buildQuery(params)}`), // New
-  updateSupportTicketStatus: (ticketId, statusData) => apiRequest(`/support/admin/${ticketId}/status`, { method: 'PUT', body: JSON.stringify(statusData) }), // New
+  getSupportTickets: (params = {}) => apiRequest(`/admin/support${buildQuery(params)}`), // Corrected endpoint
+  updateSupportTicketStatus: (ticketId, statusData) => apiRequest(`/admin/support/${ticketId}/status`, { method: 'PUT', body: JSON.stringify(statusData) }), // Corrected endpoint
 };
 
 // --- Upload ---

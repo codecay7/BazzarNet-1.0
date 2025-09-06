@@ -9,11 +9,13 @@ import useFormValidation from '../hooks/useFormValidation';
 // Import modular components
 import CustomerProfileForm from '../components/profile/CustomerProfileForm';
 import VendorProfileForm from '../components/profile/VendorProfileForm';
+import MySupportTicketsSection from '../components/MySupportTicketsSection'; // NEW: Import MySupportTicketsSection
 
 const Profile = () => {
   const { user, isVendor, updateUserInContext } = useContext(AppContext);
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState('profile'); // NEW: State for active tab
   const [profileData, setProfileData] = useState({
     name: user?.name || '',
     store: user?.store || '', // Only for vendors
@@ -244,17 +246,19 @@ const Profile = () => {
   return (
     <section className="w-full max-w-[1200px] my-10">
       <div className="bg-[var(--card-bg)] backdrop-blur-[5px] border border-white/30 rounded-2xl p-8 mx-4">
-        <div className="flex flex-col md:flex-row justify-end items-center mb-8 gap-4">
-          {!isEditing ? (
-            <button
-              className="bg-[var(--accent)] w-full md:w-fit text-white border-none py-2 px-6 rounded-lg flex items-center justify-center gap-2 font-medium hover:bg-[var(--accent-dark)] transition-all duration-300"
-              onClick={handleEditClick} // Use new handler
-              aria-label="Edit profile"
-            >
-              <FontAwesomeIcon icon={faPen} aria-hidden="true" /> Edit Profile
-            </button>
-          ) : (
-            <div className="flex gap-4">
+        <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+          <h2 className="text-3xl font-bold md:text-4xl">My Profile</h2>
+          <div className="flex gap-4">
+            {!isEditing && activeTab === 'profile' && (
+              <button
+                className="bg-[var(--accent)] w-full md:w-fit text-white border-none py-2 px-6 rounded-lg flex items-center justify-center gap-2 font-medium hover:bg-[var(--accent-dark)] transition-all duration-300"
+                onClick={handleEditClick}
+                aria-label="Edit profile"
+              >
+                <FontAwesomeIcon icon={faPen} aria-hidden="true" /> Edit Profile
+              </button>
+            )}
+            {isEditing && activeTab === 'profile' && (
               <button
                 type="button"
                 onClick={handleCancelEdit}
@@ -263,36 +267,72 @@ const Profile = () => {
               >
                 Cancel
               </button>
-              {/* The Save Changes button is now inside the child forms */}
+            )}
+          </div>
+        </div>
+
+        {/* NEW: Tabs for Profile and Support Tickets */}
+        <div className="flex justify-center bg-black/10 rounded-lg p-1 mb-6 max-w-md mx-auto" role="tablist">
+          <button
+            onClick={() => setActiveTab('profile')}
+            className={`w-1/2 py-2 rounded-md font-semibold transition-colors duration-300 ${activeTab === 'profile' ? 'bg-[var(--accent)] text-white' : 'text-[var(--text)]'}`}
+            role="tab"
+            aria-selected={activeTab === 'profile'}
+            aria-controls="profile-content-panel"
+            id="profile-tab"
+          >
+            Profile Details
+          </button>
+          <button
+            onClick={() => setActiveTab('tickets')}
+            className={`w-1/2 py-2 rounded-md font-semibold transition-colors duration-300 ${activeTab === 'tickets' ? 'bg-[var(--accent)] text-white' : 'text-[var(--text)]'}`}
+            role="tab"
+            aria-selected={activeTab === 'tickets'}
+            aria-controls="tickets-content-panel"
+            id="tickets-tab"
+          >
+            My Tickets
+          </button>
+        </div>
+
+        {/* Tab Content */}
+        <div className="mt-8">
+          {activeTab === 'profile' && (
+            <div role="tabpanel" id="profile-content-panel" aria-labelledby="profile-tab">
+              {isVendor ? (
+                <VendorProfileForm
+                  profileData={profileData}
+                  setProfileData={setProfileData}
+                  isEditing={isEditing}
+                  handleSaveChanges={handleSaveChanges}
+                  errors={errors}
+                  handleInputChange={handleInputChange}
+                  originalProfileData={originalProfileData}
+                  setIsEditing={setIsEditing}
+                  resetErrors={resetErrors}
+                />
+              ) : (
+                <CustomerProfileForm
+                  profileData={profileData}
+                  setProfileData={setProfileData}
+                  isEditing={isEditing}
+                  handleSaveChanges={handleSaveChanges}
+                  errors={errors}
+                  handleInputChange={handleInputChange}
+                  originalProfileData={originalProfileData}
+                  setIsEditing={setIsEditing}
+                  resetErrors={resetErrors}
+                />
+              )}
+            </div>
+          )}
+
+          {activeTab === 'tickets' && (
+            <div role="tabpanel" id="tickets-content-panel" aria-labelledby="tickets-tab">
+              <MySupportTicketsSection />
             </div>
           )}
         </div>
-
-        {isVendor ? (
-          <VendorProfileForm
-            profileData={profileData}
-            setProfileData={setProfileData}
-            isEditing={isEditing}
-            handleSaveChanges={handleSaveChanges}
-            errors={errors}
-            handleInputChange={handleInputChange}
-            originalProfileData={originalProfileData} // Pass original data
-            setIsEditing={setIsEditing} // Pass setter to child
-            resetErrors={resetErrors} // Pass setter to child
-          />
-        ) : (
-          <CustomerProfileForm
-            profileData={profileData}
-            setProfileData={setProfileData}
-            isEditing={isEditing}
-            handleSaveChanges={handleSaveChanges}
-            errors={errors}
-            handleInputChange={handleInputChange}
-            originalProfileData={originalProfileData} // Pass original data
-            setIsEditing={setIsEditing} // Pass setter to child
-            resetErrors={resetErrors} // Pass setter to child
-          />
-        )}
       </div>
     </section>
   );

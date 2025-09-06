@@ -2,12 +2,12 @@ import React, { useContext } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faHome, faShoppingBag, faStore, faTruck, faUser, faSignOutAlt,
-  faHeart, faShoppingCart, faQuestionCircle, faTimes // Import faTimes for the close button
+  faHeart, faQuestionCircle, faTimes // Removed faShoppingCart as Lucide version is preferred
 } from '@fortawesome/free-solid-svg-icons';
 import { AppContext } from '../context/AppContext';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Users, Package, Receipt, Store, ShoppingBag, Heart, Truck, User, Home, HelpCircle, LogOut } from 'lucide-react'; // Import Lucide icons for admin and general use
+import { Users, Package, Receipt, Store, ShoppingBag, Heart, Truck, User, Home, HelpCircle, LogOut, ShoppingCart as LucideShoppingCart } from 'lucide-react'; // Import Lucide icons, aliasing ShoppingCart
 
 const MobileNav = () => {
   const { sidebarOpen, toggleSidebar, isVendor, isAdmin, logout } = useContext(AppContext);
@@ -38,7 +38,7 @@ const MobileNav = () => {
     { name: 'Dashboard', path: '/dashboard', icon: Home },
     { name: 'Products', path: '/products', icon: ShoppingBag },
     { name: 'Stores', path: '/stores', icon: Store },
-    { name: 'Cart', path: '/cart', icon: ShoppingCart },
+    { name: 'Cart', path: '/cart', icon: LucideShoppingCart }, // Corrected to use LucideShoppingCart
     { name: 'Wishlist', path: '/wishlist', icon: Heart },
     { name: 'Orders', path: '/orders', icon: Truck },
     { name: 'Profile', path: '/profile', icon: User },

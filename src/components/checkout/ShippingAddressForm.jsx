@@ -32,7 +32,7 @@ const ShippingAddressForm = ({ address, errors, handleChange, onNextStep }) => {
           aria-invalid={!!errors?.houseNo}
           aria-describedby={errors?.houseNo ? "houseNo-error" : undefined}
         />
-        {errors?.houseNo && <p id="houseNo-error" className="text-red-400 text-xs -mt-3">{errors.houseNo}</p>}
+        {errors?.houseNo && <p id="houseNo-error" className="text-red-400 text-xs mt-1">{errors.houseNo}</p>}
       </div>
 
       <div>
@@ -61,7 +61,7 @@ const ShippingAddressForm = ({ address, errors, handleChange, onNextStep }) => {
           aria-invalid={!!errors?.city}
           aria-describedby={errors?.city ? "city-error" : undefined}
         />
-        {errors?.city && <p id="city-error" className="text-red-400 text-xs -mt-3">{errors.city}</p>}
+        {errors?.city && <p id="city-error" className="text-red-400 text-xs mt-1">{errors.city}</p>}
       </div>
 
       <div className="relative">
@@ -98,7 +98,7 @@ const ShippingAddressForm = ({ address, errors, handleChange, onNextStep }) => {
           aria-invalid={!!errors?.pinCode}
           aria-describedby={errors?.pinCode ? "pinCode-error" : undefined}
         />
-        {errors?.pinCode && <p id="pinCode-error" className="text-red-400 text-xs -mt-3">{errors.pinCode}</p>}
+        {errors?.pinCode && <p id="pinCode-error" className="text-red-400 text-xs mt-1">{errors.pinCode}</p>}
       </div>
 
       <div> {/* NEW: Mobile Number Field */}
@@ -114,7 +114,7 @@ const ShippingAddressForm = ({ address, errors, handleChange, onNextStep }) => {
           aria-invalid={!!errors?.mobile}
           aria-describedby={errors?.mobile ? "mobile-error" : undefined}
         />
-        {errors?.mobile && <p id="mobile-error" className="text-red-400 text-xs -mt-3">{errors.mobile}</p>}
+        {errors?.mobile && <p id="mobile-error" className="text-red-400 text-xs mt-1">{errors.mobile}</p>}
       </div>
       
       <button

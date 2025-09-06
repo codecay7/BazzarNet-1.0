@@ -27,6 +27,7 @@ const VendorRegistrationForm = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+    console.log(`handleChange: name=${name}, value=${value}, newFormData=${JSON.stringify({ ...formData, [name]: value })}`); // NEW LOG: Check state update
   };
 
   const validateForm = (dataToValidate) => { // Changed to accept dataToValidate
@@ -61,6 +62,7 @@ const VendorRegistrationForm = () => {
     } else if (dataToValidate.password.length < 6) {
       newErrors.password = 'Password must be at least 6 characters long.';
     }
+    // Removed validation for pan, gst, address, description, category
     setErrors(newErrors);
     console.log('Validation errors:', newErrors); // Debug log
     return Object.keys(newErrors).length === 0;
@@ -92,6 +94,7 @@ const VendorRegistrationForm = () => {
             mobile: '',
           },
         };
+        console.log('handleRegistration: vendorData sent to API:', vendorData); // NEW LOG: Check data before API call
         if (await registerVendor(vendorData)) {
           toast.success('Registration successful! Please complete your store profile with business details, address, and payment info before adding products.', { duration: 6000 });
           navigate('/dashboard');

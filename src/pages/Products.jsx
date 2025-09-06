@@ -8,7 +8,7 @@ import Pagination from '../components/Pagination';
 import ProductCard from '../components/ProductCard'; // Import the new ProductCard component
 
 const Products = () => {
-  const { allAppProducts, allAppProductsMeta, fetchAllProducts, appStores } = useContext(AppContext);
+  const { allAppProducts, allAppProductsMeta, fetchAllProducts, appStores, userPincode } = useContext(AppContext);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedStore, setSelectedStore] = useState('all');
   const [sortBy, setSortBy] = useState('name-asc');
@@ -24,14 +24,21 @@ const Products = () => {
         page: currentPage,
         limit: itemsPerPage,
         search: searchTerm,
-        category: 'all',
+        category: 'all', // Keep category filter as 'all' for now, or add a category filter state
         store: selectedStore === 'all' ? undefined : selectedStore,
+        pincode: userPincode, // NEW: Pass active userPincode to fetchAllProducts
       };
       await fetchAllProducts(params);
       setLoading(false);
     };
-    loadData();
-  }, [searchTerm, selectedStore, currentPage, fetchAllProducts]);
+    if (userPincode) { // Only load data if a pincode is set
+      loadData();
+    } else {
+      setLoading(false); // If no pincode, stop loading and show message
+      setAllAppProducts([]); // Clear products if no pincode
+      setAllAppProductsMeta({ page: 1, pages: 1, count: 0 });
+    }
+  }, [searchTerm, selectedStore, currentPage, fetchAllProducts, userPincode]);
 
   const calculateDiscount = (price, originalPrice) => {
     if (!originalPrice || originalPrice <= price) return 0;
@@ -122,7 +129,11 @@ const Products = () => {
           </div>
         </div>
 
-        {loading ? (
+        {!userPincode ? (
+          <p className="text-center text-lg opacity-80 py-10">
+            Please enter your pincode to see available products.
+          </p>
+        ) : loading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
             {[...Array(itemsPerPage)].map((_, index) => (
               <SkeletonCard key={index} className="w-full" />
@@ -135,7 +146,7 @@ const Products = () => {
             ))}
           </div>
         ) : (
-          <p className="text-center text-lg opacity-80 py-10">No products found matching your criteria.</p>
+          <p className="text-center text-lg opacity-80 py-10">No products found for pincode {userPincode} matching your criteria.</p>
         )}
 
         {!loading && sortedProducts.length > 0 && (

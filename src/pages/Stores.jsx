@@ -1,23 +1,18 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStore } from '@fortawesome/free-solid-svg-icons';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { AppContext } from '../context/AppContext';
 import SkeletonStoreCard from '../components/SkeletonStoreCard';
 import Pagination from '../components/Pagination';
 
-const VALID_PINCODE = '825301'; // Define the valid pincode
-
 const Stores = () => {
   const navigate = useNavigate();
-  const { appStores, appStoresMeta, fetchAppStores, user } = useContext(AppContext); // Removed simulateLoading
+  const { appStores, appStoresMeta, fetchAppStores, userPincode, user } = useContext(AppContext);
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 4; // Number of stores per page
-
-  const userPincode = user?.address?.pinCode;
-  const isPincodeValid = userPincode === VALID_PINCODE;
 
   useEffect(() => {
     const loadData = async () => {
@@ -27,12 +22,18 @@ const Stores = () => {
         page: currentPage,
         limit: itemsPerPage,
         search: searchTerm,
-        pincode: userPincode, // Pass user's pincode to the API
+        pincode: userPincode, // Use active userPincode from context
       };
       await fetchAppStores(params);
       setLoading(false);
     };
-    loadData();
+    if (userPincode) { // Only load data if a pincode is set
+      loadData();
+    } else {
+      setLoading(false); // If no pincode, stop loading and show message
+      setAppStores([]); // Clear stores if no pincode
+      setAppStoresMeta({ page: 1, pages: 1, count: 0 });
+    }
   }, [searchTerm, currentPage, fetchAppStores, userPincode]);
 
   const handlePageChange = (pageNumber) => {
@@ -62,11 +63,7 @@ const Stores = () => {
 
         {!userPincode ? (
           <p className="text-center text-lg opacity-80 py-10">
-            Please update your profile with a shipping address to see available stores.
-          </p>
-        ) : !isPincodeValid ? (
-          <p className="text-center text-lg opacity-80 py-10 text-red-400">
-            Currently, shops are only available for pincode {VALID_PINCODE}. Please update your address.
+            Please enter your pincode to see available stores.
           </p>
         ) : loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -93,7 +90,7 @@ const Stores = () => {
             ))}
           </div>
         ) : (
-          <p className="text-center text-lg opacity-80 py-10">No stores found matching your search for pincode {userPincode}.</p>
+          <p className="text-center text-lg opacity-80 py-10">No stores found for pincode {userPincode}.</p>
         )}
 
         {!loading && appStores.length > 0 && (

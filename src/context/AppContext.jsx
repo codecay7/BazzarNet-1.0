@@ -38,6 +38,14 @@ export const AppProvider = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = React.useState(false);
   const toggleSidebar = useCallback(() => setSidebarOpen(prev => !prev), []);
 
+  // NEW: Pincode state for filtering and modal visibility
+  const [userPincode, setUserPincode] = React.useState(null); // The active pincode for filtering
+  const [showPincodeModal, setShowPincodeModal] = React.useState(false);
+
+  const updateUserPincode = useCallback((pincode) => {
+    setUserPincode(pincode);
+  }, []);
+
   // --- Data Hooks ---
   const {
     allAppProducts,
@@ -185,9 +193,20 @@ export const AppProvider = ({ children }) => {
   useEffect(() => {
     const loadInitialData = async () => {
       if (isLoggedIn) {
+        // Set initial userPincode from profile if available
+        if (user?.address?.pinCode) {
+          setUserPincode(user.address.pinCode);
+          setShowPincodeModal(false); // Don't show modal if pincode is already in profile
+        } else if (!isVendor && !isAdmin) {
+          // Only show pincode modal for customers without a pincode in profile
+          setShowPincodeModal(true);
+        }
+
+        const commonParams = { pincode: userPincode || user?.address?.pinCode }; // Use active pincode or profile pincode
+
         const promises = [
-          fetchAllProducts(),
-          fetchAppStores(),
+          fetchAllProducts(commonParams),
+          fetchAppStores(commonParams),
           fetchCart(),
           fetchWishlist(),
           fetchOrders(),
@@ -222,11 +241,13 @@ export const AppProvider = ({ children }) => {
         setAllAppUsersMeta({ page: 1, pages: 1, count: 0 });
         setAppliedCoupon(null); 
         setDiscountAmount(0); 
+        setUserPincode(null); // Clear active pincode
+        setShowPincodeModal(false); // Hide modal
       }
     };
 
     loadInitialData();
-  }, [isLoggedIn, user, isAdmin, isVendor, fetchAllProducts, fetchAppStores, fetchCart, fetchWishlist, fetchOrders, fetchAllUsers, fetchVendorProducts, refetch, setCart, setWishlist, setAllAppProducts, setAllAppProductsMeta, setAppStores, setAppStoresMeta, setOrders, setOrdersMeta, setAllAppUsers, setAllAppUsersMeta, setVendorProducts, setVendorProductsMeta, setAppliedCoupon, setDiscountAmount]);
+  }, [isLoggedIn, user, isAdmin, isVendor, fetchAllProducts, fetchAppStores, fetchCart, fetchWishlist, fetchOrders, fetchAllUsers, fetchVendorProducts, refetch, setCart, setWishlist, setAllAppProducts, setAllAppProductsMeta, setAppStores, setAppStoresMeta, setOrders, setOrdersMeta, setAllAppUsers, setAllAppUsersMeta, setVendorProducts, setVendorProductsMeta, setAppliedCoupon, setDiscountAmount, userPincode]);
 
 
   const value = {
@@ -289,6 +310,10 @@ export const AppProvider = ({ children }) => {
     fetchAvailableCoupons: refetch,
     applyCoupon,
     removeCoupon,
+    userPincode, // NEW: Expose userPincode
+    updateUserPincode, // NEW: Expose updater
+    showPincodeModal, // NEW: Expose modal visibility
+    setShowPincodeModal, // NEW: Expose modal setter
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

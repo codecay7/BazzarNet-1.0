@@ -20,10 +20,10 @@ const useProducts = () => {
     }
   }, []);
 
-  const fetchRecommendedProducts = useCallback(async () => {
+  const fetchRecommendedProducts = useCallback(async (pincode = undefined) => { // NEW: Accept pincode
     setRecommendedLoading(true);
     try {
-      const products = await api.products.getRecommended();
+      const products = await api.products.getRecommended({ pincode }); // Pass pincode to API
       setRecommendedProducts(products);
     } catch (error) {
       console.error('Failed to fetch recommended products:', error);

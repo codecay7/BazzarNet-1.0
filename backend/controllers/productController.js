@@ -2,6 +2,7 @@ import asyncHandler from '../middleware/asyncHandler.js';
 import Product from '../models/Product.js';
 import Review from '../models/Review.js'; // Import Review model
 import Order from '../models/Order.js'; // Import Order model to check purchases
+import Store from '../models/Store.js'; // NEW: Import Store model
 import mongoose from 'mongoose'; // Import mongoose
 
 // @desc    Fetch all products (public)
@@ -38,7 +39,25 @@ const getAllProducts = asyncHandler(async (req, res) => {
     console.log('Backend: getAllProducts - Not filtering by store. req.query.store is:', req.query.store);
   }
 
+  // NEW: Pincode filtering logic
+  let pincodeStoreIds = [];
+  if (req.query.pincode) {
+    const storesInPincode = await Store.find({ 'address.pinCode': req.query.pincode, isActive: true }).select('_id');
+    pincodeStoreIds = storesInPincode.map(store => store._id);
+    
+    if (pincodeStoreIds.length === 0) {
+      // If no stores found for the pincode, return empty products array
+      return res.json({ products: [], page: 1, pages: 0, count: 0 });
+    }
+  }
+
   const finalQuery = { ...keyword, ...categoryFilter, ...storeFilter };
+
+  // Apply pincode filter if present
+  if (req.query.pincode) {
+    finalQuery.store = { $in: pincodeStoreIds };
+  }
+
   console.log('Backend: getAllProducts - Final Query:', finalQuery);
 
   const count = await Product.countDocuments(finalQuery);
@@ -67,9 +86,21 @@ const getProductById = asyncHandler(async (req, res) => {
 // @route   GET /api/products/recommended
 // @access  Public
 const getRecommendedProducts = asyncHandler(async (req, res) => {
+  // NEW: Pincode filtering for recommended products
+  let query = {};
+  if (req.query.pincode) {
+    const storesInPincode = await Store.find({ 'address.pinCode': req.query.pincode, isActive: true }).select('_id');
+    const pincodeStoreIds = storesInPincode.map(store => store._id);
+    if (pincodeStoreIds.length === 0) {
+      return res.json([]); // No recommended products if no stores in pincode
+    }
+    query.store = { $in: pincodeStoreIds };
+  }
+
   // For demo purposes, return a random selection of products
   // In a real app, this would involve recommendation logic
   const products = await Product.aggregate([
+    { $match: query }, // Apply pincode filter here
     { $sample: { size: 6 } }, // Get 6 random products
     { $project: { name: 1, image: 1, price: 1, originalPrice: 1, store: 1, unit: 1, category: 1, rating: 1, numReviews: 1 } } // Select relevant fields including unit and review data
   ]);

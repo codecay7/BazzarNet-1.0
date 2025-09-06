@@ -2,12 +2,12 @@ import React, { useContext } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faHome, faShoppingBag, faStore, faTruck, faUser, faSignOutAlt,
-  faHeart, faShoppingCart, faUsers, faBoxes, faChartLine, faBullhorn, faCog, faQuestionCircle, faTimes // Import faTimes for the close button
+  faHeart, faShoppingCart, faQuestionCircle, faTimes // Import faTimes for the close button
 } from '@fortawesome/free-solid-svg-icons';
 import { AppContext } from '../context/AppContext';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Users, Package, Receipt, Store } from 'lucide-react'; // Import Lucide icons for admin, including Store
+import { Users, Package, Receipt, Store, ShoppingBag, Heart, Truck, User, Home, HelpCircle, LogOut } from 'lucide-react'; // Import Lucide icons for admin and general use
 
 const MobileNav = () => {
   const { sidebarOpen, toggleSidebar, isVendor, isAdmin, logout } = useContext(AppContext);
@@ -20,7 +20,7 @@ const MobileNav = () => {
   };
 
   const adminLinks = [
-    { name: 'Dashboard', path: '/admin-dashboard', icon: faHome },
+    { name: 'Dashboard', path: '/admin-dashboard', icon: Home },
     { name: 'Users', path: '/admin-users', icon: Users },
     { name: 'Products', path: '/admin-products', icon: Package },
     { name: 'Orders', path: '/admin-orders', icon: Receipt },
@@ -28,20 +28,20 @@ const MobileNav = () => {
   ];
 
   const vendorLinks = [
-    { name: 'Dashboard', path: '/dashboard', icon: faHome },
-    { name: 'Manage Store', path: '/manage-products', icon: faStore },
-    { name: 'Orders', path: '/orders', icon: faTruck },
-    { name: 'Profile', path: '/profile', icon: faUser },
+    { name: 'Dashboard', path: '/dashboard', icon: Home },
+    { name: 'Manage Store', path: '/manage-products', icon: Store },
+    { name: 'Orders', path: '/orders', icon: Truck },
+    { name: 'Profile', path: '/profile', icon: User },
   ];
 
   const userLinks = [
-    { name: 'Dashboard', path: '/dashboard', icon: faHome },
-    { name: 'Products', path: '/products', icon: faShoppingBag },
-    { name: 'Stores', path: '/stores', icon: faStore },
-    { name: 'Cart', path: '/cart', icon: faShoppingCart },
-    { name: 'Wishlist', path: '/wishlist', icon: faHeart },
-    { name: 'Orders', path: '/orders', icon: faTruck },
-    { name: 'Profile', path: '/profile', icon: faUser },
+    { name: 'Dashboard', path: '/dashboard', icon: Home },
+    { name: 'Products', path: '/products', icon: ShoppingBag },
+    { name: 'Stores', path: '/stores', icon: Store },
+    { name: 'Cart', path: '/cart', icon: ShoppingCart },
+    { name: 'Wishlist', path: '/wishlist', icon: Heart },
+    { name: 'Orders', path: '/orders', icon: Truck },
+    { name: 'Profile', path: '/profile', icon: User },
   ];
 
   const links = isAdmin ? adminLinks : (isVendor ? vendorLinks : userLinks);
@@ -98,7 +98,7 @@ const MobileNav = () => {
                 className="flex items-center w-full justify-start py-2 px-4 no-underline text-lg font-medium hover:bg-white/10 rounded-lg transition-colors duration-200"
                 aria-label="Help and Support"
               >
-                <FontAwesomeIcon icon={faQuestionCircle} className="mr-3 w-5 text-center" aria-hidden="true" />
+                <HelpCircle size={20} className="mr-3 w-5 text-center" aria-hidden="true" />
                 Help
               </Link>
               <a
@@ -107,7 +107,7 @@ const MobileNav = () => {
                 onClick={(e) => { e.preventDefault(); handleLogout(); }}
                 aria-label="Logout"
               >
-                <FontAwesomeIcon icon={faSignOutAlt} className="mr-3 w-5 text-center" aria-hidden="true" />
+                <LogOut size={20} className="mr-3 w-5 text-center" aria-hidden="true" />
                 Logout
               </a>
             </nav>
